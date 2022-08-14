@@ -4,3 +4,5 @@ theme:
 nav:
   - Home: index.md
   - About: about.md
+  - Tools:
+    - GIT: tools/git.md
