@@ -1,8 +1,26 @@
 site_name: Sharing developer experiences
 theme:
   name: material
+  logo: assets/logo.png
+  favicon: assets/logo.png
+
+  palette: 
+    scheme: default
+    primary: indigo
+    accent: indigo
+  features:
+    - search.highlight
+    - search.suggest
+    - content.tabs.link
+plugins:
+  - search
+
 nav:
   - Home: index.md
-  - About: about.md
-  - Tools:
+  - 'About me': about.md
+  - 'Articles':
+    - articles/post1.md
+  - 'Books':
+    - books/groovy-in-action.md
+  - 'Tools':
     - GIT: tools/git.md
