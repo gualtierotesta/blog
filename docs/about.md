@@ -7,3 +7,5 @@ Test-Driven Development (TDD) and software testing methodologies and techniques 
 Complete profile on [LinkedIn](https://www.linkedin.com/in/gualtierotesta)
 
 I work and live close to Milan, Italy.
+
+![Gualtiero Testa](assets/gualtierotesta.jpg)
