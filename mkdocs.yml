@@ -14,7 +14,7 @@ theme:
     - content.tabs.link
 plugins:
   - search
-
+  - tags
 nav:
   - Home: index.md
   - 'About me': about.md
@@ -23,4 +23,5 @@ nav:
   - 'Books':
     - books/groovy-in-action.md
   - 'Tools':
-    - GIT: tools/git.md
+    - tools/git.md
+    - tools/subversion.md
