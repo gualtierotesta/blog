@@ -1,12 +1,46 @@
+---
+tags:
+  - tools
+  - git
+---
+
 # GIT
 
-Useful GIT commands
+*Last update: 16 Aug 2022*
 
-### Initialization
+### Basic commands
+
+Clone an existing repository
+
+    git clone URL
+    git clone git://...
+    git clone https://
 
 To create the initial repository:
 
     git init
+
+Add a new file or update it in the stage
+    
+    git add
+
+Commit (staged files)
+
+    git commit -m "comment"
+
+Push changes
+
+    git push -v
+    git push --tags
+
+Check Status
+
+    git status
+    git status --cached
+
+Rebase ignoring whitespace differences
+
+    git rebase -v --ignore-whitespace
 
 
 ### Aliases
@@ -39,120 +73,101 @@ Commands:
 
     git config push.default upstream   ## Avoid push on all branches
 
+The .gitignore file
 
-## Aggiunge un file nuovo o lo mette in stage o riaggiorna lo stage
-git add
-
-## Commit (da stage)
-git commit -m "commento"
-
-## Riallinea il remoto (origin) con il locale (master)
-git push origin master
-git push --tags
-
-## Clone
-git clone URL
-git clone git://...
-git clone http://
-git clone https://
-git clone --branch v2.2.0 git@bitbucket.org:factor-y/nlmachine.git /data/nlmachine/target/checkout
+    .gitignore            # for the current repo
+    ~/.config/git/ignore  # for all repos
 
 
-## File ignore
-.gitignore            # nel progetto
-~/.config/git/ignore  # valido per tutti i progetti
+### Logging
 
-
-
-## Status
-git status
-git status --cached
-
-## Logging
+Basic logging:
 
     git log --pretty=oneline -5
 
+Logging configuration:
+
     git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
-    # mostra i cambiamenti
+Show what has been changed
+
     git log -p
 
-  # mostra gli ultimi <numero> commit
-  git log -<numero> mostra gli ultimi <numero> commit
+Show last n commits
+
+    git log -<n>
   
-  # mostra le statisiche per ogni file toccato dal commit
-  git log --stat 
+Show stats for each new/changed file
 
-  # Mostra le differenze tra un branch e l'altro
-  git log --left-right --graph --cherry-pick --oneline develop...prod
+    git log --stat 
+
+Compare two branches
+
+    git log --left-right --graph --cherry-pick --oneline branch1...branch2
 
 
-## TAGS
+### Tags
 
-    ## Creazione tag
+Create a new tag
+
     git tag -a v1.4 -m 'my version 1.4'
 
-    ## Push dei tag
+Push tags
+
     git push --follow-tags -v
 
-    ## Elenco tag ordinati per data
+List tags ordered by creation date
+
     git for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags
 
 
-## STASH
-(nel branch) git stash
-git checkout master
-....
-git checkout <branch>
-git stash apply
+### Branches
 
-## Aggancia un branch locale ad uno remoto
-git push --set-upstream origin <branch-remoto>
-##git branch --set-upstream-to=origin/nome-branch-remoto nome-branch-locale
+Link a local branch to a remote one
 
+    git push --set-upstream origin <remote-branch>
 
-## Scarica un branch da remoto
-git fetch
-git checkout <branch>
-( equivalente a git checkout -b <branch> origin/<branch> )
+    git branch --set-upstream-to=origin/remote-branch local-branch
 
-## Crea un nuovo branch (prima in locale e poi su origin)
-git checkout -b <branch>
-git push -u origin <branch>
+Create a new local branch
 
-## Evitare che PUSH operi su tutti
-git config push.default upstream
+    git checkout -b <branch>
 
-## Per cancellare i file untracked
-git clean -i .
-git clean -f .
+Avoid pushing to all branches
 
-## Rimuovere commit locali e riallinearsi con il branch remote di upstream
-git reset --hard @{u}
+    git config push.default upstream
 
-## Rebase senza tenere conto delle differenze sui whitespace
-git rebase -v --ignore-whitespace
+Clean the branch:
+
+    git clean -i .
+    git clean -f .
+
+Remove all local commits and changes and reset the local branch to the remote branch status
+
+    git reset --hard @{u}
 
 
-## Manutenzione
-git gc --auto --prune
-git fsck --full
-git prune --expire now
+### Special commands
 
-## Aggiorna l'elenco locale dei branch
-git remote update origin --prune
+GIT internal DB maintenance:
 
-## Patch
-git format-patch -1 <sha1> --stdout > myPatch.patch
-git log --pretty=oneline -7 | tac  | awk '{print "git format-patch -1 "  $1  " --stdout > "}' > 1
-git am --signoff -k < <patch-file>
+    git gc --auto --prune
+    git fsck --full
+    git prune --expire now
 
-git log --pretty=oneline -7 | tac  | awk '{print "git diff-tree --no-commit-id --name-only -r " $1}' > 2
+Updates and cleanup remote branch list
 
-## Creazione di un secondo remote
-git remote add backup  git@bitbucket.org:factor-y/backup-portletpiastra.git
-git remote set-url --add  --push backup  git@bitbucket.org:factor-y/backup-portletpiastra.git
-git push backup <nome-branch>
+    git remote update origin --prune
 
+Patch
 
+    git format-patch -1 <sha1> --stdout > myPatch.patch
+    git log --pretty=oneline -7 | tac  | awk '{print "git format-patch -1 "  $1  " --stdout > "}' > 1
+    git am --signoff -k < <patch-file>
+
+Create a second remote repository
+
+    git remote add backup  URL
+    git remote set-url --add  --push backup  URL
+    git push backup <branch-name>
 
