@@ -1,7 +1,7 @@
 # Welcome to Gualtiero Testa blog
 
-`Articles` section contains posts on different topics.
+The `Articles` section contains posts on different topics.
 
-`Books` section is dedicated to books review.
+The `Books` section is dedicated to book reviews.
 
-`Tools` section include handy and quick reference to several developers tools.
+The `Tools` section include handy and quick reference to several developers' tools.

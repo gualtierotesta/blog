@@ -1,7 +1,5 @@
 ---
-tags:
-  - book review
-  - groovy
+tags: [book review, groovy]
 ---
 
 # Groovy in Action
