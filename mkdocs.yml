@@ -1,4 +1,7 @@
 site_name: Sharing developer experiences
+site_author: Gualtiero Testa
+site_url: https://gualtierotesta.github.io/blog
+
 theme:
   name: material
   logo: assets/logo.png
@@ -12,16 +15,37 @@ theme:
     - search.highlight
     - search.suggest
     - content.tabs.link
+    - content.code.annotate
+    - navigation.instant
+
 plugins:
   - search
   - tags
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
 nav:
-  - Home: index.md
+  - 'Home': index.md
+
   - 'About me': about.md
+
   - 'Articles':
-    - articles/post1.md
-  - 'Books':
+    - articles/java-ee-schedulers.md
+    - articles/maven-enforcer.md
+    - articles/slf4j-correct-usage.md
+    - articles/test-java-classes-immutability.md
+    - articles/vaadin-7-maven-dependencies.md
+
+  - 'Books reviews':
+    - books/bluemix-learning.md
+    - books/go-programming-blueprints.md
     - books/groovy-in-action.md
+
   - 'Tools':
     - tools/git.md
     - tools/subversion.md
