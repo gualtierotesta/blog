@@ -4,6 +4,8 @@ I am a software analyst, architect and developer involved in web-based applicati
 
 Test-Driven Development (TDD) and software testing methodologies and techniques are my main interests, without forgetting about coding and code quality.
 
+Follow me on [Twitter](https://twitter.com/gualtierotesta)
+
 Complete profile on [LinkedIn](https://www.linkedin.com/in/gualtierotesta)
 
 I work and live close to Milan, Italy.
