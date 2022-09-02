@@ -11,3 +11,5 @@ Complete profile on [LinkedIn](https://www.linkedin.com/in/gualtierotesta)
 I work and live close to Milan, Italy.
 
 ![Gualtiero Testa](assets/gualtierotesta.jpg)
+
+Note: the picture has been taken in Rapallo (GE), Italy
