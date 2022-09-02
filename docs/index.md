@@ -1,4 +1,4 @@
-# Welcome to Gualtiero Testa blog
+# Welcome to Gualtiero Testa's blog
 
 ![Home](assets/images/home.jpg)
 
