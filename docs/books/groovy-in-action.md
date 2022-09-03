@@ -2,9 +2,11 @@
 tags: [book review, groovy]
 ---
 
-# Groovy in Action
+# Groovy in Action (second edition)
 
 *Last update: 02 Sep 2022*
+
+![Groovy in Action](../covers/groovy-in-action.jpeg)
 
 [Groovy in Action, 2nd Edition](https://www.manning.com/books/groovy-in-action-second-edition) (Manning, June 2015)
 

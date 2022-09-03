@@ -6,6 +6,8 @@ tags: [bluemix, book review, cloud, cloud foundry,docker,ibm,openstack]
 
 *Last update: 11 Jan 2017*
 
+![Learning IBM Bluemix](../covers/bluemix-learning.jpeg)
+
 [Learning IBM Bluemix](https://www.goodreads.com/book/show/32803163) by [Sreelatha Sankaranarayanan](https://www.goodreads.com/author/show/16026082)  
 
 My rating: [3 stars](https://www.goodreads.com/review/show/1874633804)

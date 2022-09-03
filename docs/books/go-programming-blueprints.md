@@ -2,9 +2,11 @@
 tags: [book review, golang, programming, web development]
 ---
 
-# Go Programming Blueprints 
+# Go Programming Blueprints (second edition)
 
 *Last update: 9 Apr 2017*
+
+![Go Programming Blueprints](../covers/go-programming-blueprints.jpeg)
 
 [Go Programming Blueprints - Solving Development Challenges with Golang](https://www.goodreads.com/book/show/24880488) by [Mat Ryer](https://www.goodreads.com/author/show/13479862)
 
