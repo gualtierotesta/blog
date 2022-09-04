@@ -23,25 +23,25 @@ Year: 2019
 
 As developers, we organize our application code in classes and packages/modules. 
 
-There are several ways to compose the code. A popular approach is the "three-tiered" architecture where the logic is divided in presentation, business and data layers. See link #1.
+There are several ways to compose the code. A popular approach is the "three-tiered" architecture where the logic is divided into the presentation, business and data layers. See link #1.
 
 Alternative architectures are the "hexagonal" or "port/adapters" (see link #2) and R. Martin's Clean Architecture (link #3).
 
-There are books which explain the architectures benefits and downsides. Among them, I suggest R. Martin's "Clean Architecture" book. 
+Some books explain architecture's benefits and downsides. Among them, I suggest R. Martin's "Clean Architecture" book. 
 
-On the other hand, Tom Hombergs' book complements these theoretical books showing how to implement the architectures using significant examples in Java.
+On the other hand, Tom Hombergs's book complements these theoretical books by showing how to implement the architectures using significant examples in Java.
 
 The author explains:
 
 * how to organize code in packages
 * how to interface the logic between different application layers
-* how to pass and map data object through layers
+* how to pass and map data objects through layers
 
-All examples are clear and well documented.
+All examples are clear and well-documented.
 
 I've personally found quite useful the explanation of the possible data mapping strategies.
 
-I highly suggest Tom Hombergs' "Get your hands dirty on clean architecture" book.
+I highly suggest Tom Hombergs's "Get your hands dirty on clean architecture" book.
 
 Links:
 
