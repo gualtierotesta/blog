@@ -4,13 +4,21 @@ tags: [book review, golang, programming, web development]
 
 # Go Programming Blueprints (second edition)
 
-*Last update: 9 Apr 2017*
+*Last update: 04 Sep 2022*
 
-![Go Programming Blueprints](../covers/go-programming-blueprints.jpeg)
+<img align="left" src="../covers/go-programming-blueprints.jpeg" alt="cover" height="200" />
 
-[Go Programming Blueprints - Solving Development Challenges with Golang](https://www.goodreads.com/book/show/24880488) by [Mat Ryer](https://www.goodreads.com/author/show/13479862)
+**Go Programming Blueprints (second edition)**
 
-My rating: [4 stars](https://www.goodreads.com/review/show/1964914459)
+Author: Mat Ryer
+
+ISBN: 9781786468949
+
+Publisher: Packt Publishing Ltd.
+
+Year: 2016
+
+<br/>
 
 This book is not a primer on GO Language (here I suggest “The GO Programming Language” by Donovan & Kernighan, Addison-Wesley) but it should be read just after learning the basic concepts of the language and its toolchain.
 
