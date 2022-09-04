@@ -4,13 +4,22 @@ tags: [book review, groovy]
 
 # Groovy in Action (second edition)
 
-*Last update: 02 Sep 2022*
+*Last update: 04 Sep 2022*
 
-![Groovy in Action](../covers/groovy-in-action.jpeg)
 
-[Groovy in Action, 2nd Edition](https://www.manning.com/books/groovy-in-action-second-edition) (Manning, June 2015)
+<img align="left" src="../covers/groovy-in-action.jpeg" alt="cover" height="200" />
 
-My rating: [5 stars](http://www.goodreads.com/review/show/1645279457)
+**Groovy in Action Second Edition**
+
+Authors: Dierk König, Paul Kink
+
+ISBN: 9781935182443
+
+Publisher: Manning Publications Co.
+
+Year: 2015
+
+<br/>
 
 A must-have for any **serious Groovy developer.**
 
