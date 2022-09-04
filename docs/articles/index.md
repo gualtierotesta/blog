@@ -12,7 +12,8 @@
 
 ### Testing
 
-* [Testing Java classes immutability](test-java-classes-immutability.md)
+* [Testing Java classes' immutability](testing/java-classes-immutability.md)
+* [POJO and JavaBean testing using the bean-matchers library](testing/bean-matchers.md)
 
 
 ### Vaadin
