@@ -2,6 +2,7 @@
 
 ### Java
 
+* [The 5 Java logging rules](java/logging-rules.md)
 * [Java EE Schedulers](java-ee-schedulers.md)
 * [SLF4J correct usage](slf4j-correct-usage.md)
 
