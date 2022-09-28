@@ -1,5 +1,5 @@
 ---
-tags: [tools, ibm, db2, udb]
+tags: [tools, ibm, db2, udb, dbms]
 ---
 
 # IBM DB2
@@ -43,7 +43,7 @@ Check the current tables and indexes status
     reorgchk update statistics on table user
 
 
-### Command line commands
+### Command line
 
 How to start DB2
 
