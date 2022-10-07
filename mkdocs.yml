@@ -7,7 +7,7 @@ theme:
   logo: assets/logo.png
   favicon: assets/logo.png
 
-  palette: 
+  palette:
     scheme: default
     primary: indigo
     accent: indigo
@@ -30,9 +30,9 @@ markdown_extensions:
   - pymdownx.superfences
 
 nav:
-  - 'Home': index.md
-  - 'About me': about.md
-  - 'Articles': articles/index.md
-  - 'Books reviews': books/index.md
-  - 'Tools': tools/index.md
-   
+  - "Home": index.md
+  - "About me": about.md
+  - "Articles": articles/index.md
+  - "Books reviews": books/index.md
+  - "Languages": languages/index.md
+  - "Tools": tools/index.md
