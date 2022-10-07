@@ -6,7 +6,7 @@ Test-Driven Development (TDD) and software testing methodologies and techniques 
 
 Follow me on [Twitter](https://twitter.com/gualtierotesta)
 
-Complete profile on [LinkedIn](https://www.linkedin.com/in/gualtierotesta)
+My complete profile is on [LinkedIn](https://www.linkedin.com/in/gualtierotesta)
 
 I work and live close to Milan, Italy.
 
