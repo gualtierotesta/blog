@@ -1,0 +1,57 @@
+# Refactoring
+
+## Bad Smells
+
+* Duplicated code
+* Long methods: metodi troppo lunghi (> 10 linee)
+* Complex conditional statements
+* Primitive obsession: usare int e stringhe invece di value object
+* Indecent exposure: metodi e classi locali esposti 
+* Solution sprawl: soluzione distribuita tra diverse classi
+* Alternative classes with different interfaces: le stesse classi implementano interfacce diverse invece di una sola interfaccia
+* Lazy classes: classi che non fanno niente
+* Large (God) classes: classi che fanno troppo
+* Switch statements: swithc usati al posto del polimorfismo
+* Combinatorial explosions: intrico di condizioni logiche
+* Oddball solutions: soluzioni diverse allo stesso problema
+
+
+## Compose methods
+
+* Extract Method (110) - blocco di codice sostituito da chiamata a metodo
+* Inline Method (117) - Sostituisce una chiamata ad un metodo con il codice del metodo
+* Inline Temp (119) - Sostituisce una variabile temp con la sua espressione
+* Replace Temp With Query (120) - Sostituisce una variabile temp con la chiamaa ad un metodo
+* Introduce explaining variable (124) - Crea una variabile temp per chiarire la logica
+* Split temporary variable (128) - Quando una variabile temporanea è assegnata più volte
+* Remove Assignment to Parameters (131) - Quando si assegnano i parametri del metodo
+* Replace Method with Method Object (135) - Sostituisce un metodo complesso in un oggetto con un metodo (da poi decomporre)
+* Substitute algorithm (139) - Sostituisce un agoritmo con un più chiaro
+
+## Moving Features between Objects
+
+* Move method (142) - da una classe alla classe dove è usato di più
+* Move field (146) - da una classe alla classe dove è usato di più (anche attraverso i getter/setter)
+* Extract class (149) - quando una classe svolge troppe funzioni
+* Inline class (154) - quando una classe non fa niente
+* Hide delegate (157) - introducd metodi delega per nascondere le dipendenze interne della classe chiamata
+* Remove Middle Man (160) - rimuove una classe che si limita a delegare
+* Introduce foreign method (162) - quando si vuole aggiungere un metodo ad una classe che non è modificabile
+* Introduce local extension (164) - quando si vuole aggiungere diversi metodi ad una classe che non è modificabile
+
+## Organizing Data
+
+* Self Encapsulate Field (171) - accedere ad un campo con i metodi accessori
+* Replace data value with object (175) - Sostituire un tipo di dato base con un oggetto per aggiungere funzionalità
+* Change value with reference (179) - trasformare un oggetto valore in un oggetto con identità
+* Change reference to Value (183) - trasformare un oggetto con identità in un oggetto valore
+* Replace array with Object (186) - quando i valori dell'array hanno significati diversi
+* Duplicate observed data (189) - separare dati e logica dalla UI
+* Change unidirectional association to Bidirectional (197) - rendere bidirezionale la relazione tra due classi
+* Change bidirectional association to unidirectional (200) - rendere unidirezionale la relazione tra due classi
+* Replase Magic number with symbolic costant (204) - creare una costante per i numeri che hanno un particolare significato
+* Encapuslate field (206) - trasformare un campo public in uno private con metodi accessori
+* Encapsulate collections (208) - Sostituire getter/setter sui campi collection con add/remove
+* Replace record with data class (217) - Creare una class di interfaccia con metodi accessori per i campi del record
+* Replace type code with class (218) - Sostituire costanti intere o stringhe con classi (o enum)
+
