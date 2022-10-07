@@ -29,6 +29,11 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
 
+extra:
+  analytics:
+    provider: google
+    property: G-Z08MZGHK67
+
 nav:
   - "Home": index.md
   - "About me": about.md
