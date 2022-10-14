@@ -2,13 +2,13 @@
 tags: [book review, dop, programming, paradigm, data-oriented-programming]
 ---
 
-# Data Oriented Programming
+# Data Oriented Programming (Reduce software complexity)
 
 *Last update: 14 Oct 2022*
 
 <img align="left" src="../covers/data-oriented-programming.jpeg" alt="cover" height="200" />
 
-**Data Oriented Programming**
+**Data Oriented Programming (Reduce software complexity)**
 
 Author: Yehonathan Sharvit
 
