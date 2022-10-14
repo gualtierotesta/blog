@@ -2,7 +2,7 @@
 tags: [book review, dop, programming, paradigm, data-oriented-programming]
 ---
 
-# Data Oriented Programming (Reduce software complexity)
+# Data Oriented Programming
 
 *Last update: 14 Oct 2022*
 
