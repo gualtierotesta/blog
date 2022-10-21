@@ -3,15 +3,14 @@ tags: [java, ee, transactions]
 ---
 # JAVA EE Transactions
 
-**TO BE TRANSLATED INTO ENGLISH**
+*Last update: 21 Oct 2022*
 
-
-The transactions can be 
+The Java EE transactions can be 
 
 * Container managed
 * Application (o bean) managed
 
-Resources related to the transactions
+The following resources are related to the transactions:
 
 ```java
 @Resource
@@ -23,82 +22,71 @@ private UserTransaction userTransaction;
 
 Links:
 
-1. [Rollback](ttp://www.developerscrappad.com/547/java/java-ee/ejb3-x-jpa-when-to-use-rollback-and-setrollbackonly/)
-2. [Teoria sulle transazoni](http://www.giuseppesicari.it/articoli/java-transaction-api/)
-3. [Force rollback](http://stackoverflow.com/questions/832375/is-there-a-way-to-force-a-transactional-rollback-without-encountering-an-excepti)
+1. [Force rollback](https://stackoverflow.com/questions/832375/is-there-a-way-to-force-a-transactional-rollback-without-encountering-an-excepti)
 
 
-### Container-managed transaction (CMT)
+### Container-Managed Transaction (CMT)
 
-The CMT transactions are handled by the EJB container.
+The container-managed transactions are handled by the EJB container and the EJB class has the following annotation:
 
 ```java
 @TransactionManagement(TransactionManagementType.CONTAINER)
 ```
-I limiti di start e stop della transazione sono i metodi dell'EJB: la transazione è creata prima della chiamata al metodo e il commit subito dpo la fine del metodo.
 
-Il **rollback** è determinato dalle eccezioni o da una chiamata diretta a _context.setRollbackOnly()_
+The EJB methods are the points where the transaction starts and ends. In general, the transaction is created by the container before invoking the method and it is committed after the method returns.
 
-Vietato l'uso di :
+The **rollback** of a failing transaction is caused by an exception raised by the invoked method. The roolback can also be forced by invoking the `context.setRollbackOnly()` method.
 
-* Metodi commit, setAutoCommit e rollback di java.sql.Connection
-* Metodo getUserTransaction di javax.ejb.EJBContext
-* Tutti i metodi di javax.transaction.UserTransaction
+In a container-managed transaction, it is **forbidden** to:
 
-L'annotation **@TransactionAttribute** determina il comportamento transazionale del singolo metodo o di tutti i metodi nella classe. I suo valori sono:
+* Invoke the methods `commit`, `setAutoCommit`, and `rollback` of the class `java.sql.Connection`
+* Invoke the method `getUserTransaction` of the class `javax.ejb.EJBContext`
+* Invoke any method of the class `javax.transaction.UserTransaction`
 
-* REQUIRED : default, usa la transazione del chiamante o ne crea una nuova se il chiamante non è in transazione
-* REQUIRES_NEW : una nuova transazione è sempre creata; se il chiamante è in transazione, questa viene sospesa
-* MANDATORY: il chiamante deve essere in transazione pena eccezione di _TransactionRequired_
-* NOT_SUPPORTED: per metodi che devono essere eseguiti **fuori** da una transazione; se il chiamante è in transazione, questa viene sospesa
-* SUPPORTS: in transazione solo se anche il chiamante è in transazione. Da usare con cautela
-* NEVER: mai in transazione; lancia eccezione se chiamante è in eccezione
+The annotation `@TransactionAttribute` determines how the container creates the transactions before invoking the EJB method. Its possible values are:
 
-Nota: gli MDB supportano solo gli attributi REQUIRED e NOT_SUPPORTED
+* REQUIRED: the default value. The container creates a new transaction or uses the one created by the invoking method (if any)
+* REQUIRES_NEW: the container always creates a new transaction, even if there is already one transaction active (that will be suspended).
+* MANDATORY: there should be already an active transaction created by the invoking method otherwise a `TransactionRequiredException` is raised.
+* NOT_SUPPORTED: the method without any transaction. If an active transaction exists, it is suspended.
+* SUPPORTS: if there is an active transaction, it will be kept active while invoking the method. Otherwise, no transaction is created. The use of this value is discouraged because of the uncertainty of the transaction's presence.
+* NEVER: the method should never be executed inside a transaction, An exception is raised if one active transaction exists.
 
-Pseudo-codice:
+Please note that the MDB just support the REQUIRED and NOT_SUPPORTED attributes.
 
-```
+Pseudo-code:
+
+```java
 try {
-    ..updates
+    //..updates
 } catch(Exception ecc) {
+    // An exception has been detected. Rollback the transaction
     sessioncontext.setRollbackOnly();
 }
 ```
 
 ### Application-bean managed transaction (BMT)
 
-The BMT transactions are handled by our code.
+The BMT transactions are handled by our code. The following annotation should be specified at EJB class level
 
 ```java
     @TransactionManagement(TransactionManagementType.BEAN)
 ```
-Gestite dal codice: le transazioni sono create e chiuse in maniera esplicita.
 
-L'API di riferimento è la JTA (Java Transaction API).
+Our code should create the transactions and close them normally (commit) or abnormally (rollback).
 
-L'interface di riferimento è **javax.transaction.UserTransaction* che permette di iniziare, chiudere e abortire le transazioni in maniera programmatica.
+The Java Transaction API (JTA) is the API we should refer to handle the bean-managed transactions.
+
+Within this API, the interface `javax.transaction.UserTransaction` is the one we should use to perform actions on the transactions. An instance of this interface can be injected as a resource (see above).
 
 Pseudo-codice:
 
-```
+```java
 try {
     usertransaction.begin();
-    ..updates
+    // ..updates
     usertransaction.commit();
 } catch(Exception ecc) {
     usertransaction.rollback;
 }
 ```
-
-## TEORIA
-
-Tutti i sistemi transazionali esibiscono quattro caratteristiche note con l’acronimo **ACID**: 
-
-* **Atomicità** significa che i task che costituiscono la transazione costituiscono un’unica unità di elaborazione pertanto devono essere eseguiti tutti affinchè la transazione possa considerarsi completata positivamente.
-* **Consistenza** significa che se il sistema si trova in uno stato consistente con le regole di business prima dell’invocazione della transazione, allora successivamente all’invocazione dovrà trovarsi ancora in uno stato consistente.
-* **Isolamento** è quella proprietà che assicura che le transazioni non si influenzino vicendevolmente.
-* **Duravolezza** significa che se una transazione che è stata completata con successo i suoi effetti diventano permanente.
-
-Altro concetto importante è il **two-phase commit** che indica che tutte le risorse coinvolte nella transazioni arrivano prima ad uno stadio di commit preliminare per poi passare a quello definitivo ma solo se tutte sono al preliminare. Se una fallisce allora tutte le risorse fanno rollback.
-
