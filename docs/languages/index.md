@@ -3,6 +3,9 @@ tags: [languages, java, groovy, GO]
 ---
 # Languages
 
+Articles, notes and info on the languages I use and their ecosystems.
+
+
 ### Java
 
 * [Application Servers](java/application-servers.md)
