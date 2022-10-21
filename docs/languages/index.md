@@ -32,6 +32,7 @@ tags: [languages, java, groovy, GO]
 
 ### Groovy
 
+* [GMaven Plus plugin](groovy/gmaven-plugin.md)
 * [Book review: Groovy in Action](../books/groovy-in-action.md)
 
 
