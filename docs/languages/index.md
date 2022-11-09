@@ -24,7 +24,6 @@ Articles, notes and info on the languages I use and their ecosystems.
 * [JDK data structures](java/jdk-data-structures.md)
 * [Maven](java/maven.md)
 * [Mockito](java/mockito.md)
-* [Objects](java/objects.md)
 * [Open J9](java/openj9.md)
 * [Portal & portlet](java/portlet-portal.md)
 * [SLF4J](java/slf4j.md)

@@ -1,224 +1,235 @@
 ---
-tags: [java, jdk, data structures, list, set, map, queue]
+tags: [java, jdk, data structures, list, set, map, queue, iterator]
 ---
 # DATA STRUCTURES IN THE JDK
 
-**TO BE TRANSLATED INTO ENGLISH**
+*Last update: 9 Nov 2022*
 
 
 ### LIST
 
-    Iteration/enumeration
-        Enumeration è il vecchio (Java 1) modo di iterare. Sostitituita dall'iterator
-        
-    ArrayList
-    
-    CopyOnWriteArrayList: 
-        utile quando faccio iterazione che cancellano alcuni elementi. 
-        Da non usare quando la lista è grande perché usa più copie dell'array di cui uno
-        di snapshot per mantenere l'elenco iniziale nel caso si usi un iterator.
-        Utile quando ho tannte letture e poche scritture come ad esempio l'elenco degli observers/listeners
+Iteration/enumeration
 
-    LinkedList:
-        Basata su nodi e non array.
-        Da non usare. Molto inefficiente
+    The enumeration is the old way (Java 1) to iterate a collection of items. It has been replaced by the iterator.
         
-    Vector:
-        Sincronizzata (Thread safe). Da non usare. 
-        In alternativa: Collections.synchronizedList( new ArrayList<>(...))
+ArrayList
+
+    The standard list. It is based on an array.
+    
+CopyOnWriteArrayList
+
+    Useful when removing elements during iteration.
+    It should not be used when the list is very big because it creates several copies of the underlying array. 
+    One of the copies is kept to be used for the iterator.
+    Useful when there are many readers and few writers like in observers/listener lists.
+    observers/listeners
+
+LinkedList (Do not use)
+
+    It is based on nodes, not arrays.
+    Do not use, very inefficient.
         
-    Stack:
-        Da non usare. Estende Vector.
-        Usare ConcurrentLinkedDequeue
-        
+Vector (Do not use)
+
+    Synchronised array.
+    Alternative: Collections.synchronizedList( new ArrayList<>(...))
+
+Stack  (Do not use)
+
+    Extend Vector.
+    Alternative: ConcurrentLinkedDequeue
+
+
 ### SET
 
-    TreeSet
-        Richiede che gli oggetti siano Comparable; l'identità degli oggetti (per capire 
-        se sono univoci) dipende dal metodo compareTo, non da equals o hashCode,
-        I dati inseriti sono ordinati.
-        L'albero binario è di tipo Red-Black quindi mantiene un bilanciamento tra i rami
-        dell'albero, indipendentemente dai dati in ingresso (se sono ordinati o meno, ad esempio).
-        Non è thread-safe.
+TreeSet
 
-    ConcurrentSkipListSet
-        Variante thread-safe di TreeSet che usa una list di tipo SkipList che usa più puntatori per arrivare
-        direttamente alla metà e ad altri punti intermedi della lista, in modo da avere un accesso
-        in lettura di tipo log(n) quindi più veloce della LinkedList
-        Prestazioni paragonabili alla TreeSet ma in versione concorrente
-        Purtroppo è una struttura dati complessa che non è molto usata, nemmeno della JDK,
-        per cui Kabuz pensa che sia piena di bug.
+    The items in the collection should be Comparable: the identity of the items is based on the method compareTo, not on the methods equals or hashCode.
+    The items are ordered.
+    The binary tree is a Red-Black type so tree branches are balanced in length.
+    Not thread-safe.
 
-    CopyOnWriteArraySet
-        Struttura dati molto simile alla CopyOnWriteArrayList quindi safe-thread.
-        I dati inseriti non sono ordinati. L'univocità dei dati è verificata con equals().
-        Consigliata per quantità piccole di dati perché le operazione hanno costo quadratico (n*n)
-        Add : O(n)
-        Contains : O(n)
-        new from other collection: O(n * n)
+ConcurrentSkipListSet
 
-    HashSet
-        Set non thread-safe basato su hashCode e non compareTo (o equals). NON è ordinata, quindi.
-        Lookup: O(1)
+    A thread-safe variant of TreeSet that uses a SkipList list that uses multiple pointers to get directly to the middle and other intermediate points of the list, to have a log(n) read access therefore faster than the LinkedList.
+
+    The performances are similar to the TreeSet but concurrently.
+    It is not frequently used, even in the JDK itself.
+
+CopyOnWriteArraySet
+
+    It is a thread-safe structure similar to CopyOnWriteArrayList.
+    Items are not ordered. The method equals is used for univocity.
+    Suggested for small collections because all operations have quadratic (n*n) cost.
+
+HashSet
+
+    A not thread-safe set which uses the method hashCode for univocity.
+    Items are not ordered.
         
-    ConcurrentHaspMap.getKeySet
-        Modo per ottenere un set thread-safe tipo TreeSet.
-        
-    LinkedHashSet
-        Set costruito su una LinkedHashMap (vedi dopo). Non thread-safe
+ConcurrentHashMap.getKeySet
 
-    EnumSet
-        Set specializzata con valori che sono enum. Ottimizzata per operazioni sugli insiemi. Non thread-safe
+    A way to get a thread-safe set similar to TreeSet.
         
+LinkedHashSet
+
+    A not thread-safe set based on LinkedHashMap (see later)
+
+EnumSet
+    Non thread-safe. It is a set where items are enums.
+    It is optimised for set operations.
+
 
 ### MAP
         
-    HashMap
-        Non thread-safe. Usa l'hashcode della chiave per determinare il bucket dove collocare la coppia chiave, valore.
-        All'interno del bucket usa poi una linked list per salvare le diverse coppie. Da Java 8, se le coppie sono più di 11
-        (=tanti clash) usa un treeset per passare da lookup lineare (O(n)) a logaritimico (O(log(n)).
-        Per questo, da Java 8 è meglio che l'oggetto usato come chiave, se non è una String, implementi Comparable
+HashMap
 
-    ConcurrentHashMap
-        Versione thread-safe di HashMap. Da Java 8, l'overhead è talmente basso da non giustificare più l'uso solo in alcuni casi.
-        Per evitare il rischio che una mappa che si pensa usata solo da un thread, possa essere usata da più thread, si consiglia
-        di usare ConcorrentHashMap sempre.
-        Attenzione: computeIfAbsent() had two concurrency bugs - a livelock and lock contention. Risolti in Java 9.
+    Not thread-safe. 
+    The key hashCode is used to determine the bucket in the map where to store the key-value couple.
+    Inside the bucket, the couple is saved in a linked list.
+    From Java 8, if the bucket contains more than 11 couples, the linked list is replaced by a tree set for performance reasons. it is so better to use a key which implements the Comparable interface.
 
-    TreeMap
-        Non thread-safe. Le chiavi sono ordinate per cui devono implementare Comparable.
+ConcurrentHashMap
+
+    The thread-safe variant of the HashMap.
+    From Jaba 8, its overhead is low and there are no more strong reasons to prefer the HashMap.
+    Be aware that two concurrency bugs in the computeIfAbsent method have been fixed in Java 9.
+
+TreeMap
+    
+    Not thread-safe. The keys are ordered and they should implement the Comparable interface.
         
-    ConcurrentSkipListMap
-        Versione concorrente di TreeMap
-        Vedi <ConcurrentSkipListSet> e per gli stessi motivi Kabutz suggerisce di non usarla
- 
-    Hashtable
-        Esiste da Java 1. Concorrente ma molto lento nelle letture. Preferire ConcorrentHashMap
+ConcurrentSkipListMap
 
-    LinkedHashMap
-        Simile ad HashMap ma con puntatori (link) che ricordano l'ordine di inserimento
-        Non thread-safe
-        Funzionalità interessante è che l'ordine, che di default, è quello di inserimento, può essere invece
-        a "access_order" ovvero in ordine di ultimo accesso (get). LRU = least recently used
-        
-    EnumMap
-        Mappa specializzata con le chiavi che sono enum. Non thread-safe. Non molto usata
-        Utile al posto di usare <enum>.ordinal() come indice per un array/lista
-        
-    IndentityHashMap
-        Mappa che controlla l'esistenza di una chiave attraverso l'identità (==) invece che con l'uguaglianza (equals)
-        Non molto usata. Non thread-safe
-        
-    Properties
-        Esiste da Java 1, estende da Hashtable ma adesso usa internamente una ConcorrentHashMap
-        
-    WeakHashMap
-        Variante di HashMap che usa una WeakReference per le chiavi (ma una normale Stringreference sui valori)
-        Da non usare perché impredicibili nel tempi (il purge è nelle diverse chiamate) e perché il WeakReference
-        non sono ben gestiti dai GC.
+    It is the concurrent version of the TreeMap.
+    Not so used.
+    
+Hashtable
 
-### ITERATORI:
+    It is a Java 1 concurrent map with very slow reads.
+    Better to use the ConcorrentHashMap
 
-    fail-fast:
-        L'iteratore controlla che la collezione sottostante non sia modificata durante l'iterazione, nel qual
-        caso lancia una ConcurrentModificationException.
-        Le collection non thread-safe normalmente hanno un iteratore fail-fast
-        Non è però garantito (solo best-effort) che l'iterator rilevi la modifica.
-        
-    weakly consistent (o fail-safe)
-        Sono gli iteratori delle collezioni thread-safe. Gestiscono il fatto che la collezione sottostante
-        possa essere modificata; non lanciano mai ConcurrentModificationException.
-        Non garantisco però (da qui il wekly) di riportare l'ultimo stato delle modifiche.
-        Il numero di elementi iterati è quello presente al momento della creazione dell'iteratore.
-        
-    snapshot
-        L'iteratore usa uno snapshot della collezione. usato in CopyOnWriteArrayList e CopyOnWriteArraySet
-        (le collezioni COW).
-        Questi iteratori sono a sola lettura (non modificano lo snalpshot).
-        
-    undefined
-        Iterator e enumeration delle vecchie collections: Vector e Hashtable.
-        Non danno garanzie di alcun genere in caso di modifiche concorrenti.
-        
-        
-QUEUE e DEQUEUE 
+LinkedHashMap
 
-    QUEUE   = FIFO, pronuncia "kiu"
-    DEQUEUE = FIFO e LIFO, pronuncia "deck", (Double Ended Queue)
-
-    Le code implementano operazioni secondo diversi nomi:
-                Throws Ex   Return result
-        Insert 	add(e) 	    offer(e)        aggiunge alla tail
-        Remove 	remove() 	poll()          prende dalla head
-        Examine element() 	peek()          esamina la head
-
-    Nelle dequeu first = head, last = tail
-
-    Le deque hanno anche i metodi "stack": push (=addFirst), pop (=removeFirst)
-
-    L'ordine delle code è di solito il FIFO; 
-        le priority però usano un comparatore
-        le dequeue usano anche LIFO (o stack)
-
-    Le code non permettono di solito l'inserimento di null
+    Not thread-safe. It is similar to the HashMap but with links that record the insertion order.
+    The order can be changed to a least recently used (LRU) order.
     
     
-    ConcurrentLinkedQueue, ConcurrentLinkedDequeue
-        Entrambe multi producer multi consumer. Lunghezza della coda unbounded (non limitata)
-        La funzione size() ha un costo alto ( O(n) ) perché deve sempre iterare gli elementi per contarli. In una coda 
-        però non ha molto senso contare gli element.
-        L'iterator è weakly consistent
-        ConcurrentLinkedDequeue può essere usato come stack thread-safe
-        ConcurrentLinkedQueue può essere usato come LinkedList thread-safe se non si usa la get(index)
+EnumMap
+
+    Not thread-safe. It is a specialised map where the keys are enums.
+    Not so used but it is convenient as a list index instead of the Enum.ordinal() method.
+
+IndentityHashMap
+
+    Not thread-safe. The key's presence is checked with the identity (==) instead of the equality ( equals() ).
+    Not so used.
+    
+Properties
+
+    It exists since Java 1. Originally it used a HashTable but now it is based on a ConcurrentHashMap.
         
-    ArrayDeque
-        Non thread-safe. Implementazione di dequeue basata su array. 
-        Veloce, la maggioranza delle operazioni sono costant time ( O(1) ). 
-        Null non accettato. Iterator fail-fast.
-        Non si riduce in dimensioni se togli elementi.
+WeakHashMap
 
-    Blocking queues and dequeues
-        Variante che blocca la scrittura nel caso la coda è piena e la lettura nel caso la coda è vuota.
-        Le blocking sono sempre thread-safe e prevedono meccanismi di timeout per non bloccare definitivamente il 
-        thread che accede alla coda.
-        Non accettano nulli.
+    Similar to the HashMap where the keys are WeakReferences. The idea is the map can be emptied by the garbage collector.
+    Operation time is unpredictable because the purge is implemented in the calls. Moreover, the WeakReferences are not handled very well by the garbage collector.
 
-    LinkedBlockingQueue e LinkedBlockingDeque 
-        Hanno un lock sul head e uno sul tail perché sono ottimizzate per single producer single consumer.
-        Negli altri casi il loro lock determina prestazioni più scarse rispetto ad altre code.
-        E' possibile indicare una capacità (lunghezza della coda) massima.
+### ITERATORS
 
-    ArrayBlockingQueue
-        Bounded queue implementata con un array di dimensioni fisse (non ridimensionabile).
-        Usa un singolo lock per cui c'è contention quando c'è più di un producer e/o consumer.
-        Efficiente nell'uso della memoria.
+fail-fast
 
-     DelayQueue
-        Queue non molto usata in JDK. Gli elementi della coda sono visibili al consumer solo dopo un ritardo.
-        Kabutz suggerisce di usare in alternativa un ScheduledExecutorService
+    The iterator checks if the underlying collection has been modified. If so, it throws a ConcurrentModificationException.
+    The not thread-safe collections usually have a fail-fast iterator.
+    It is not guaranteed (best-effort) that the iterator detects the change in the collection.
+       
+weakly consistent (or fail-safe)
 
-    SynchronousQueue
-        Coda sincrona (nel senso di non asincrona) che di fatto ha 0 o 1 elemento.
-        Usata per implementare la cachedThreadPool e poco altro.
-        A blocking queue in which each insert operation must wait for a corresponding remove operation 
-        by another thread, and vice versa. A synchronous queue does not have any internal capacity, 
-        not even a capacity of one. You cannot peek at a synchronous queue because an element is only 
-        present when you try to remove it; you cannot insert an element (using any method) unless another 
-        thread is trying to remove it; you cannot iterate as there is nothing to iterate. The head of the 
-        queue is the element that the first queued inserting thread is trying to add to the queue; if 
-        there is no such queued thread then no element is available for removal and poll() will return 
-        null. For purposes of other Collection methods (for example contains), a SynchronousQueue 
-        acts as an empty collection. This queue does not permit null elements. 
+    The thread-safe collections use fail-safe iterators. These iterators can handle the changes in the underlying collection; they never throw a ConcurrentModificationException.
+    They cannot guarantee (weakly consistency) that they report the latest state of the collection.
+    The number of the collection's items iterated is the one when the iterator has been created.
 
-    LinkedTransferQueue 
-        Coda introdotta nella beta di Java 7 ad uso del ForkJoinPool ma poi non più usata.
-        Di per sì non è male ma non essendo utilizzata meglio non usarla.
+snapshot
 
-    PriorityQueue and PriorityBlockingQueue
-        Code unbounded che considerano l'ordinamento del dato per definire l'ordine nella coda. Attenzione però che l'ordinamento
-        non è stabile ovvero il risultato dell'ordinamento non è sempre lo stesso, in particolare nei dati che sono
-        uguali tra di loro
-        PriorityQueue non è thread safe mentre lo è PriorityBlockingQueue
-        La priorità può essere definita in ordine naturale (se il dato implementa Comparable) o con un Comparator.
+    The snapshot iterator uses a read-only snapshot of the content of the collection. It is used in the COW collections (CopyOnWriteArrayList and CopyOnWriteArraySet).
 
+undefined
+
+    Iterator added to the old Vector and HashTable collections.
+    Their behaviour is undefined when there are concurrent writes.
+        
+        
+### QUEUE e DEQUEUE 
+
+QUEUE   = FIFO, pronounced "kiu"
+DEQUEUE = FIFO e LIFO, pronounced "deck", (Double Ended Queue)
+
+    Queue operations have different names and implementing methods:
+
+        - INSERT: add or offer
+        - REMOVE: remove or poll
+        - CHECK: element or peek
+        - STACK (dequeue only): push (=addFirst) and pop (=removeFirst)
+
+    The order is usually FIFO but the priority queues use a comparator and the dequeues can also use a LIFO order.
+
+    All queues and dequeues do not allow null values.
+
+    
+ConcurrentLinkedQueue, ConcurrentLinkedDequeue
+
+    They're both multi-producer and multi-consumer. The queue length is unbounded (=without limits).
+    The size() method has a high cost because all items should be iterated. Moreover, there is no meaning to count the items in a queue.
+    The iterator is weakly consistent.
+    The ConcurrentLinkedDequeue can be used as a thread-safe stack.
+    The ConcurrentLinkedQueue can be used as a thread-safe LinkedList but the method get(index) should not be used.
+
+
+ArrayDeque
+
+    It is not thread-safe; the underlying structure is an array.
+    Fast, most of the operation costs have constant time ( O(1)).
+    Nulls not accepted. Fail-fast operator.
+
+Blocking queues and dequeues
+
+    They block the write operations if the queue is full and the read operations if the queue is empty.
+    They are thread-safe with timeouts that can prevent forever blocking.
+    Nulls not accepted.
+
+LinkedBlockingQueue e LinkedBlockingDeque 
+
+    They are optimised for the single-producer single-consumer use case. In other cases, they can be slower than the other queues.
+    It is possible to define a limit in the queue length.
+
+ArrayBlockingQueue
+
+    Bounded queue based on a fixed length array. Bounded
+    Memory efficient, it uses a single lock so there is contention when there are more producers and/or consumers.
+
+DelayQueue
+
+    Not so used in the JDK.
+    The elements in the queue are visible to the consumer only after a delay.
+
+SynchronousQueue
+
+    A synchronous queue with max one element. It is used to implement the cachedThreadPool.
+    
+    A blocking queue in which each inserts operation must wait for a corresponding remove operation by another thread, and vice versa.
+    
+    A synchronous queue does not have any internal capacity, not even a capacity of one. You cannot peek at a synchronous queue because an element is only present when you try to remove it; you cannot insert an element (using any method) unless another thread is trying to remove it; you cannot iterate as there is nothing to iterate. 
+    
+    The head of the queue is the element that the first queued inserting thread is trying to add to the queue; if there is no such queued thread then no element is available for removal and poll() will return null. 
+    
+    For purposes of other Collection methods (for example, contains), a SynchronousQueue acts as an empty collection. This queue does not permit null elements. 
+
+LinkedTransferQueue 
+
+    Introduced in a JAVA 7 beta version to be used in the ForkJoinPool but then no more used.
+    
+PriorityQueue and PriorityBlockingQueue
+
+    These are unbounded queues that sort the elements in the queue.
+    The PriorityQueue is not thread-safe while the PriorityBlockingQueue is.
+    The priority is based on the natural order (if items implement Comparable) or via a comparator.
 
