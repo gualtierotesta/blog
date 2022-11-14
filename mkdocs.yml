@@ -40,5 +40,6 @@ nav:
   - "Articles": articles/index.md
   - "Books reviews": books/index.md
   - "Languages": languages/index.md
+  - "Methodologies": methodologies/index.md
   - "My books": my-books.md
   - "Tools": tools/index.md
