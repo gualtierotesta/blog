@@ -20,6 +20,7 @@ Articles, notes and info on the languages I use and their ecosystems.
 * [FindBugs / SpotBugs](java/findbugs.md)
 * [Gradle](java/gradle.md)
 * [Java 17](java/java17.md)
+* [JDBC](java/jdbc.md)
 * [JDK commands](java/jdk-commands.md)
 * [JDK data structures](java/jdk-data-structures.md)
 * [Maven](java/maven.md)
@@ -29,6 +30,7 @@ Articles, notes and info on the languages I use and their ecosystems.
 * [SLF4J](java/slf4j.md)
 * [Spring Boot](java/spring-boot.md)
 * [Spring Security](java/spring-security.md)
+* [Streams](java/streams.md)
 * [Vavr](java/vavr.md)
 
 

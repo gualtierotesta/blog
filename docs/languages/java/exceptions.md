@@ -3,12 +3,18 @@ tags: [java, exceptions, best practice, antipattern]
 ---
 # Exceptions in Java
 
-*Last update: 12 Nov 2022*
+*Last update: 14 Nov 2022*
+
+Certification topics:
+
+* Handle exceptions using try/catch/finally clauses, try-with-resource, and multi-catch statements
+* Create and use custom exceptions
+
 
 References and credits:
 
-* [book: Effective Java](https://www.goodreads.com/book/show/105099.Effective_Java_)
-* [post: Top 20 Java Exception Handling Best Practices](https://howtodoinjava.com/best-practices/java-exception-handling-best-practices/)
+* [Effective Java (book)](https://www.goodreads.com/book/show/105099.Effective_Java_)
+* [Top 20 Java Exception Handling Best Practices (post)](https://howtodoinjava.com/best-practices/java-exception-handling-best-practices/)
 
 In Java, the exceptions are divided into checked, unchecked and errors.
 
