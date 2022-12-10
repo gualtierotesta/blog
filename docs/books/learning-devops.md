@@ -11,7 +11,7 @@ tags: [book review, groovy]
 
 **Learning DevOps First Edition**
 
-Author: Mikaek Krief
+Author: Mikael Krief
 
 ISBN: 9781838642730
 
