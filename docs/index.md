@@ -11,3 +11,5 @@ The [Languages](languages/index.md) section contains info on several programming
 The [My Books](my-books.md) section lists the books I co-wrote.
 
 The [Tools](tools/index.md) section includes a set of handy and quick references to several developers' tools.
+
+You can find me on <a rel="me noopener" href="https://mastodon.uno/@gualtierotesta" target="_blank">Mastodon</a>
