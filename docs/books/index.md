@@ -6,3 +6,4 @@
 * [Groovy in Action](groovy-in-action.md)
 * [GO Programming blueprints](go-programming-blueprints.md)
 * [Learning IBM Bluemix](bluemix-learning.md)
+* [Learning DevOps](learning-devops.md)
