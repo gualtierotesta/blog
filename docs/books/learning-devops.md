@@ -28,10 +28,10 @@ This book is a nice read and a great resource. Five stars.
 The devops concepts, tools and methodologies are well explained and introduced smoothly and logically. The author describes, with practical examples and clear explanations, all the topics related to the devops world:
 
 * Git ops
-* Infrastructore as a code
+* Infrastructure as a code
 * Pipelines
-* Continuos integration
-* Continuos delivery
+* Continuous integration
+* Continuous delivery
 * Testing and quality checks
 * Security
 * Containers
