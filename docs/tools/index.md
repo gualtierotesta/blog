@@ -1,5 +1,9 @@
 # Tools
 
+### IDEs and Environments
+
+* [WSL 2 on Windows 10/11](ide/wsl2.md)
+
 ### Version control
 
 * [GIT](git.md)
