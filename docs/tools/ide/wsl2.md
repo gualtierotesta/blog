@@ -10,9 +10,9 @@ tags: [tools, ide, wsl, wsl2, windows]
 
 **Step 1: Windows Terminal**
 
-Install Windows Terminal, which replaces the old "cmd" and supports Linux shells, in addition to the Windows PowerShell and Command. 
+Install the Windows Terminal application, which replaces the old "cmd" and supports Linux shells, in addition to the Windows PowerShell and Command. 
 
-See https://learn.microsoft.com/en-us/windows/terminal/install 
+See [here](https://learn.microsoft.com/en-us/windows/terminal/install) for more details. 
 
 **Step2: install WSL**
 
@@ -26,6 +26,6 @@ If you want a different Linux distribution, you can get the list of the supporte
 
     wsl -l -o
 
-See https://learn.microsoft.com/en-us/windows/wsl/install
+See  [here](https://learn.microsoft.com/en-us/windows/wsl/install) for more details.
 
 
