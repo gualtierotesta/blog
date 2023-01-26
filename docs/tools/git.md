@@ -6,7 +6,7 @@ tags:
 
 # GIT
 
-*Last update: 16 Aug 2022*
+*Last update: 26 Jan 2023*
 
 ### Basic commands
 
@@ -44,6 +44,8 @@ Rebase ignoring whitespace differences
 
 
 ### Aliases
+
+Some useful aliases
 
     alias gf='git fetch -v'
     alias gr='git rebase -v --ignore-whitespace'
