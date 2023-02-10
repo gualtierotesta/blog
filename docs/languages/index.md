@@ -20,6 +20,7 @@ Articles, notes and info on the languages I use and their ecosystems.
 * [FindBugs / SpotBugs](java/findbugs.md)
 * [Gradle](java/gradle.md)
 * [Java 17](java/java17.md)
+* [Java EE / Jakarta](java/javaee-jakarta.md)
 * [JDBC](java/jdbc.md)
 * [JDK commands](java/jdk-commands.md)
 * [JDK data structures](java/jdk-data-structures.md)

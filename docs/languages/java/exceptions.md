@@ -22,7 +22,7 @@ In Java, the exceptions are divided into checked, unchecked and errors.
 
 The checked exceptions are exceptions that must be declared in the throws clause of a method.
 
-They extend Exception and are intended to be an "in your face" type of exception.
+They extend the class Exception and are intended to be an "in your face" type of exception.
 
 A checked exception indicates an expected problem that can occur during normal system operation. 
 
