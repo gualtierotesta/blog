@@ -15,5 +15,7 @@ The [Tools](tools/index.md) section includes a set of handy and quick references
 You can find me on
 
 * <a rel="me noopener" href="https://mastodon.uno/@gualtierotesta" target="_blank">Mastodon</a>
+* <a rel="me noopener" href="https://github.com/gualtierotesta" target="_blank">GitHub</a>
 * <a rel="me noopener" href="https://twitter.com/gualtierotesta" target="_blank">Twitter</a>
+* <a rel="me noopener" href="https://www.codewars.com/users/gualty" target="_blank">CodeWars</a>
 * <a rel="me noopener" href="https://www.linkedin.com/in/gualtierotesta/" target="_blank">LinkedIn</a>
