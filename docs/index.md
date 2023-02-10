@@ -12,4 +12,8 @@ The [My Books](my-books.md) section lists the books I co-wrote.
 
 The [Tools](tools/index.md) section includes a set of handy and quick references to several developers' tools.
 
-You can find me on <a rel="me noopener" href="https://mastodon.uno/@gualtierotesta" target="_blank">Mastodon</a>
+You can find me on
+
+* <a rel="me noopener" href="https://mastodon.uno/@gualtierotesta" target="_blank">Mastodon</a>
+* <a rel="me noopener" href="https://twitter.com/gualtierotesta" target="_blank">Twitter</a>
+* <a rel="me noopener" href="https://www.linkedin.com/in/gualtierotesta/" target="_blank">LinkedIn</a>
