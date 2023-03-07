@@ -1,12 +1,6 @@
 # Tools
 
-### WSL2 on Windows 10/11
-
-* [Installation](wsl2/installation)
-* [Windows Terminal](wsl2/windows-terminal)
-* [VS-Code](wsl2/vs-code)
-* [Java tools](wsl2/java-tools)
-* [Node.js tools](wsl2/nodejs-tools)
+* [WSL2 on Windows 10/11](wsl)
 
 ### Version control
 
