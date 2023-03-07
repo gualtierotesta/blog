@@ -1,8 +1,12 @@
 # Tools
 
-### IDEs and Environments
+### WSL2 on Windows 10/11
 
-* [WSL 2 on Windows 10/11](ide/wsl2.md)
+* [Installation](wsl2/installation.md)
+* [Windows Terminal](wsl2/windows-terminal.md)
+* [VS-Code](wsl2/vs-code.md)
+* [Java tools](wsl2/java-tools.md)
+* [Node.js tools](wsl2/nodejs-tools.md)
 
 ### Version control
 
