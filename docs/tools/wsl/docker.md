@@ -4,7 +4,7 @@ tags: [tools, ide, wsl, wsl2, docker]
 
 # Docker on on WSL2
 
-*Last update: 9 Mar 2023*
+*Last update: 7 May 2023*
 
 Docker Engine and command line tools can be installed on the WSL Linux distribution.
 
@@ -18,13 +18,13 @@ Warning: the guide suggests checking the installation using the docker "hello-wo
 
 3) Enable the user to start the docker service
 
-The docker service is not automatically executed (as Linux daemon) inside the WSL2. Moreover, you need root rights to start it.
+The docker service is not automatically executed (as a Linux daemon) inside the WSL2. Moreover, you need root rights to start it.
 
 If you want to avoid running the service without being the root user, run the following command:
 
     sudo visudo -f /etc/sudoers.d/passwordless_docker_start
 
-and enter the following content in the open file, replacing "<username>" with your user name:
+and enter the following content in the open file, replacing `<username>` with your user name:
       
     <username>   ALL = (root) NOPASSWD: /usr/sbin/service docker start
 
