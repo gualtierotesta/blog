@@ -16,7 +16,9 @@
 
 ### Cloud / Kubernetes
 
+* [Kubernetes](kubernetes.md)
 * [Helm](cloud/helm.md)
+
 
 ### Security
 
