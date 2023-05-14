@@ -6,3 +6,4 @@ tags: [software development, methodologies, design patterns]
 Articles and personal notes on the software development methodologies I use or I would like to use ;-)
 
 * [Refactoring](refactoring.md)
+* [Web Security](web-security.md)
