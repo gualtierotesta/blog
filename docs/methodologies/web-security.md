@@ -22,7 +22,8 @@ Web security is the intersection of the following:
 - Information security (InfoSec): how we handle the data -> cryptography, access control...
 - Application security (AppSec): how we use the applications --> vulnerability, credentials storage...
 
-Security releated tools:
+Security related tools:
+
 - WAF, Web Application Firewall, HTTP level firewalls
 - IDS, Intrusion Detection System
 - IPS, Intrusion Prevention System
