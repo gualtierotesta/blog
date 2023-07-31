@@ -3,9 +3,7 @@ tags: [software, security, web, authentication, authorization]
 ---
 # Web security
 
-*Last update: 14 May 2023*
-
-**XXX TO BE TRANSLATED XXX**
+*Last update: 31 Jul 2023*
 
 ## References
 
@@ -22,7 +20,7 @@ Web security is the intersection of the following:
 - Information security (InfoSec): how we handle the data -> cryptography, access control...
 - Application security (AppSec): how we use the applications --> vulnerability, credentials storage...
 
-Security related tools:
+Security-related tools:
 
 - WAF, Web Application Firewall, HTTP level firewalls
 - IDS, Intrusion Detection System
@@ -56,37 +54,33 @@ Every API service should implement a **security pipeline**. The steps in the pip
 2) Auditing/logging: track and log all requests and responses, assigning a unique ID to all inbound requests to enable inter-service tracing.
 3) CORS
 4) Generic (non-endpoint specific) validation rules check like "Content-Type" should be "application/json"
-5) Identification and authentication: user authentication and/or token validation. Users session can be created after authentication.
-6) Access control / authorization. If the user is authenticated (previous step), user permissions should be checked against the request requirements. See below for related HTTP response codes. See also reference 4. 
-7) Endpoint specific validation rules, input data validation
+5) Identification and authentication: user authentication and/or token validation. User sessions can be created after authentication.
+6) Access control/authorization. If the user is authenticated (previous step), user permissions should be checked against the request requirements. See below for related HTTP response codes. See also reference 4.
+7) Endpoint-specific validation rules, input data validation
 
-HTTP answers:
+Security-related HTTP answers:
 
     401 User is not authenticated.
     403 The user is not allowed to perform the requested operation, even if they are authenticated.
 
 
-## SOP, ORIGIN, CORS, X-Frame-Options
+## SOP, ORIGIN
 
-ORIGIN: unione di protocollo, server e porta.  (Per IE solo protocollo e server)
+ORIGIN: in any URL, the origin is the union of the protocol, the server and the port (if specified). For example the origin in the URL https://www.example.com/pages/index.html is https://www.example.com. (port is 443 here).
 
-SOP: Same origin policy: implementata dai browser, impedisce chiamata a server che non abbiano la stessa origin della pagina chiamante. In realtà la chiamata avviene ma il browser impedisce che si possa vedere la risposta alla chiamata.
+The same-origin policy (SOP) is a critical security mechanism that restricts how a document or script loaded from one origin can interact with a resource from another origin. It helps isolate potentially malicious documents, reducing possible attack vectors.
 
-In genere sono le operazioni di lettura che sono bloccate. Quelle di scrittura (es. form submit) e ambedding sono di norma permesse.
-Vedi https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy
+SOP usually block read calls while writing calls (for ex. form submits) are usually allowed.
 
-The same-origin policy is a critical security mechanism that restricts how a document or script loaded from one origin can interact with a resource from another origin. It helps isolate potentially malicious documents, reducing possible attack vectors.
-
-Embedding l'accesso ad una risorsa permette du superare alcuni blocchi di SOP quindi spesso le risorse sono marcate come non embeddable. Vedi anche header X-Frame-Options (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)
-
-
-CORS: Cross Origin XXXX, permette di controllare la SOP
+For more details [MDN on SOP](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy)
 
 
 
 ## AUTHENTICATION
 
-Basic: ad ogni chiamata sono fornite le credenziali user e password. Basic authentication. richiede TLS
+The web supports several kinds of authentication mechanisms:
+
+**Basic**: user credentials are provided on every HTTP requests.
 
 Token base: chiamo prima un endpoint con le credenziali che poi mi fornisce un token a scadenza che uso per fare le altre chiamate.
 Questo token è spesso chiamato session token o cookie token.
