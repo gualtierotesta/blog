@@ -3,7 +3,7 @@ tags: [software, security, web, authentication, authorization]
 ---
 # Web security
 
-*Last update: 31 Jul 2023*
+*Last update: 01 Aug 2023*
 
 ## References
 
@@ -40,28 +40,13 @@ Information security's (see reference 3) primary focus is data *Confidentiality*
 - Denial of service (DoS)
 - elevation of privilege
 
-## API security
 
-A reverse proxy or, better, an API gateway, is usually placed in front of an API server/service to:
-
-- handle TLS/SSL terminations
-- validate the credentials (user authentication, tokens validation)
-- facade back-end services
-
-Every API service should implement a **security pipeline**. The steps in the pipeline, in the order they process the upcoming requests, are the following:
-
-1) Rate limiting / throttling
-2) Auditing/logging: track and log all requests and responses, assigning a unique ID to all inbound requests to enable inter-service tracing.
-3) CORS
-4) Generic (non-endpoint specific) validation rules check like "Content-Type" should be "application/json"
-5) Identification and authentication: user authentication and/or token validation. User sessions can be created after authentication.
-6) Access control/authorization. If the user is authenticated (previous step), user permissions should be checked against the request requirements. See below for related HTTP response codes. See also reference 4.
-7) Endpoint-specific validation rules, input data validation
+## HTTP codes
 
 Security-related HTTP answers:
 
-    401 User is not authenticated.
-    403 The user is not allowed to perform the requested operation, even if they are authenticated.
+* **401** User is not authenticated.
+* **403** The user is not allowed to perform the requested operation, even if they are authenticated.
 
 
 ## SOP, ORIGIN
@@ -76,161 +61,65 @@ For more details [MDN on SOP](https://developer.mozilla.org/en-US/docs/Web/Secur
 
 
 
-## AUTHENTICATION
+## COOKIE
 
-The web supports several kinds of authentication mechanisms:
+Cookie contents:
 
-**Basic**: user credentials are provided on every HTTP requests.
+* `path` = "/" is the path used by the browser to establish if the cookie should be sent to the server or not depending on the current page
+* `expiration` (expires and max-age) = cookie expiration date. If not specified, the cookie is a session cookie and it is deleted by the browser at the end of the session. If specified, the cookie is persistent. If the date is in the past, the cookie is deleted.
+* `attributes` = Secure (send only on HTTPS),  HttpOnly (not readable from JS code), SameSite
+* `Domain`: the domain of the cookie. If not specified, the cookie is "host-only"
+* `name` = the name of the cookie
 
-Token base: chiamo prima un endpoint con le credenziali che poi mi fornisce un token a scadenza che uso per fare le altre chiamate.
-Questo token è spesso chiamato session token o cookie token.
 
-Cookie per salvare il token: l'endpoint di login genera il token ed risponde con l'header Set-Cookie. Tutte le successive chiamate avranno il token nel cookie.
- 
-Cookie:
-	path = "/" indica il percorso usato per determinare se il cookie deve essere inviato al server
-	scadenza (expires e max-age) = scadenza del cookie. Se non indicata il cookie è cancellato alla chiusura del browser (session cookie).
-        Se indicata, il cookie è persistent. Se è una data nel passato, il cookie è cancellato dal browser
-	attributi = 
-        Secure (solo su HTTPS, non HTTP)
-        HttpOnly (non leggibile da codice JS)
-        SameSite
-    Domain: se non indicato, il cookie (host-only) è inviato a tutte le chiamate al server che ha creato il cookie
-        se indicato: il cookie è inviato a quel dominio e a tutti i suoi sotto-domini
-	nome tipico = JSESSIONID
+The suggested cookies attributes:
 
-Alternativa ai cookie è salvare il token sull'URL.
+* Session cookie: HttpOnly, Secure, Path=/
+* CSRF token cookie: Secure, SameSite=strict, Path=/
 
-## CSRF (Cross Site Request Forgery)
 
-Il sito A chiama le API di back-end del sito B sfruttando il fatto che il browser invia i cookie relativi al sito B quindi facendo credere al back-end del sito B che la chiamata arriva dal suo front-end. SOP impedisce al sito A di vedere i risultati della chiamata ma intanto la chiamata è stata fatta.
-Prima difesa è assicurarsi che le chiamate GET non siano dispositive perchè SOP permette le chiamate, bloccando solo le risposte.
-Seconda protezione è marcare con "SameSite" i cookie di autorizzazione: il browser non manda al back-end del sito B i cookie marcati come samesite se le chiamate arrivano dal sito A per cui le chiamate falliscono perché non autorizzate. 
-Per site si intende il dominio registrato tipo "example.com"
-SameSite=strict: i cookie non sono inviate in tutte le chiamate "illegali"
-SameSite=lax: i cookie sono inviate solo quando l'utente ha premuto su un link. Tutto il resto è bloccato.
-I cookie SameSite non sono ancora uno standard ufficiale e i vecchi browser potrebbero non implementarlo.
-Altra protezione: double-submit cookie. Il server crea un cookie per CSRF (senza attributo HttpOnly). 
-Tutte le chiamate del client devono includere il valore di questo cookie nell'header X-CSRF-Token. 
-Il server controlla che il valore del cookie e dell'header coincidano.
-Per ulteriore protezione il token CSRF deve essere derivato dal security token (session cookie) ad esempio con un hash tipo SHA-256 in modo che nessuno possa cambiare sia il cookie CSRF sia l'header X-CSRF-Token per cercare di bypassare le protezioni.
 
-Non autenticato: 401
-Autenticato ma senza permessi: 403
-Richiesta con content type non corretto: 415
+## CSRF (Cross-Site Request Forgery) and SameSite cookie attribute
 
-Cookie di sessione (JSESSIONID) : HttpOnly, Secure, Path=/
-Cookie di CSRF                  : Secure, SameSite=strict, Path=/
+Cross-site Request Forgery (CSRF) is a web attack where actions are performed using the user's identity without them knowing what is happening.
 
-Logout:
- - invalidare la sessione
- - cancellare il cookie (mettere la sua expire date nel passato)
+See [Wikipedia](https://en.wikipedia.org/wiki/Cross-site_request_forgery) for more details.
+
+The user is logged in the website A and opens a new browser tab on Website B (the attacker). Website B calls website A back-end services; the browser sends the session cookie to the website A back-end which accepts the request. Even if the browser implements the same-origin policy, still many requests can be done from website B pages to website A server. 
+
+The first defence line is to not have GET endpoints that perform create or update or delete actions. Use POST, UPDATE or DELETE methods as appropriate.
+
+The second defence line is to use the `SameSite` attribute for the session cookie; when set, the browser will not send the cookie if the page does not have the same site (domain) as the cookie.
+
+The SameSite attribute can have the following values:
+
+* strict: the cookie is not sent in all cross-site requests
+* lax: the cookie is sent on navigation requests only
+* none: the cookie is always sent
+
+Alternative to the SameSite attribute is the `double-submit cookie` mechanism. At the first request, the server creates a special CSRF token cookie with a value that the client (the page) should include at every request using the X-CSRF-Token header. The server compares the value with the one that has been generated and allows the request accordingly.
 
 
 ## CORS
 
-Il browser effettua una prima chiamata di pre-fligth (HTTP OPTIONS) per determinare se è possibile chiamare l'endpoint. In questa chiamata l'header Origin riporta l'origine della chiamata.
+Cross-Origin Resource Sharing (CORS) is a security mechanism that allows websites and APIs to control and overcome the same origin policy implemented by the browser.
 
-La response alla chiamata di pre-flight contiene i seguenti headers:
+See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) for more details.
+
+The browser performs a pre-flight request, using the HTTP method OPTIONS, to evaluate if the cross-origin request is possible or not. 
+
+The pre-flight response from the server includes several CORS headers:
 
     Access-Control-Allow-Origin
     Access-Control-Allow-Headers
     Access-Control-Allow-Methods
-    Access-Control-Allow-Credentials: deve essere a true se vogliamo usare i cookie di sessione
+    Access-Control-Allow-Credentials (should be true if we use session cookies)
     Access-Control-Max-Age
     Access-Control-Expose-Headers
     
-    Pre-flight: si risponde con 403 se fallisce, con 204 (no contents) se ok
-    
-Non usare cookie SameSite in presenza di CORS perché incompatibili.
+The pre-flight response status code can be:
+
+* 403: the request cannot be performed because not allowed by the resource server
+* 204 (no-contents): the request can be done
 
 
-## JWT (Jason Web Token, "JOT")
-
-Struttura:
-
-    header "." payload "." signature
-
-    Tutti i tre base64 encoded in maniera distinta
-
-    Uso tipico:
-    "Authentication: Bearer xxxx.yyyy.zzzz"
-    ma può essere passato anche sull'URL, altro header o anche in un cookie (se proprio si vuole)
-
-Standard HEADER claims:
-	typ: the type of the token (how the payload can be interpreted)
-        alg: the name of the algorithm used to make the signature
-
-	Esempio:
-		{
-			typ: 'JWT', 
-			alg: 'HS256'
-		}
-
-Standard PAYLOAD claims:
-
-    iss: the issuer of the token
-    sub: the subject of the token
-    aud: the audience of the token
-    exp: this will probably be the registered claim most often used. 
-	    This will define the expiration as a NumericDate value. 
-	    The expiration MUST be after the current date/time.
-    nbf: (not before) defines the time before which the JWT MUST NOT be accepted for processing
-    iat: (issued at) the time the JWT was issued. 
-	    Can be used to determine the age of the JWT
-    jti: unique identifier for the JWT. 
-	    Can be used to prevent the JWT from being replayed. 
-	    This is helpful for a one time use token.
-
-    Esempio:
-        {  
-          "iss": "http://example.org",  
-          "aud": "http://example.com",  
-          "iat": 1356999524,  
-          "nbf": 1357000000,  
-          "exp": 1407019629,  
-          "jti": "id123456",  
-          "typ": "https://example.com/register",  
-          "custom-property": "foo",  
-          "name": "Rob McLarty",  
-          "id": 78  
-        }
-
-Compiti della API che riceve una richiesta con JWT
-
-    1. Verificare che il JWT non sia stato manipolato (forged).
-       Ricalcola la firma partendo dall'header e dal payload ricevuti e la confronta con quella ricevuta.
-       Per fare questo deve sapere il secret
-       Non si può usare l'algoritmo indicato nell'header ricevuto perché potrebbe essere stato messo a null.
-
-    2. Verificare che il JWT sia valido: non scaduto (exp), non già usato (jti) o inserito in blacklist.
-
-
-Il fatto di avere una scadenza (claim exp) permette al server di rilasciare dei token senza preoccuparsi di disabilitarli.
-
-La scadenza tipica è di 24 ore ma può essere anche di 1 o 2 ore.
-
-Vantaggi del JWT:
-    * Niente sessioni lato server. Non serve un session storage
-    * Lo stesso token può essere usato su diversi endpoint/applicazion se queste condividono il secret (o l'endpoint di validazione)
-    * Niente cookie quindi niente prolemi di CSRF (i token non sono inseriti automaticamente dal browser)
-    * Tutte le applicazioni, anche quello non basate su browser, possono gestire gli header
-    * Scadenza inclusa
-    * Compatibile con CORS
-
-
-## API KEY
-
-Secret generato server side e condiviso con i client.
-
-Confronto API Key vs JWT:
-     
-    * Sicurezza granulare: con JWT si può distinguere le autorizzazioni sulle richieste. 
-      Con un API key tutti possono fare tutto a meno di creare, se possibile, una API key specifica per 
-      l'insieme di operazioni indicate. Vedi cosa fa adesso GitHub.
-    * Omogeneità della architettura: usare i JWT per tutto permette di avere una soluzione più omogenea.
-    * I JWT possono essere self-emitted permettendo soluzioni decentralizzate. 
-    * Compatibile con OAuth2. Invece di restituire un token opaco, il server può usare un JWT.
-    * I token opachi non sono debuggabili.
-    * Le API key non hanno una scadenza esplicita.
-    * Le API key non vanno usato in app per mobile dove il dispositivo potrebbe essere rubato.
