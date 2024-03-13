@@ -1,0 +1,102 @@
+# Design Patterns
+
+## ECB (Entity-Control-Boundary)
+Generalizzazione del pattern MVC a tutti i sistemi e non solo quelli di UI
+Entity: dati di business e logica associata (validazione, operazioni di business)
+Boundary: al limite del sistema; costituisce il front-end del sistema (UI, API Rest) e il suo back-end (db, servizi esterni)
+Control: mediatore tra entity e boundary
+
+Regole:
+1. Un elemento può parlare con elementi dello stesso tipo
+2. Control parla con entity e boundary
+3. boundary e entity non si parlano direttamente
+
+
+## GoF Creational
+
+* Singleton
+* Abstract Factory
+* Builder
+* Factory Method
+* Prototype
+
+## GoF Structural
+
+* Adapter
+* Bridge
+* Composite
+* Decorator
+* Facade
+* Flyweight
+* Proxy
+
+## GoF Behavioural
+
+* Chain of responsability
+* Command
+* Interpreter
+* Iterator
+* Mediator
+* Memento
+* Observer
+* State
+* Strategy
+* Template method
+* Visitor
+
+
+## EE Patterns
+
+* Transaction Script
+* Domain model
+* Table module
+* Service Layer
+* Table data gateway
+* Row Data gataway
+* Active record
+* Data mapper
+* Unit of work
+* Identity map
+* Lazy load
+* Identity field
+* Foreign Key Mapping
+* Association Table Mapping
+* Dependent mapping
+* Embedded value
+* Serialized Lob
+* Single table inheritance
+* Class table inheritance
+* Concrete table inheritance
+* Inheritance mappers
+* Metadata mapping
+* Query object
+* Repository
+* Model View Controller
+* Page Controller
+* Front Controller
+* Template View
+* Transform View
+* Two-step View
+* Application Controller
+* Remote Facade
+* Data Transfer Object (DTO)
+* Optimistic aff lock
+* Pessimistic aff lock
+* Coarse grained lock
+* Implicit Lock
+* Client sessione state
+* Server sessione state
+* DB session state
+* gateway
+* Mapper
+* Layer subtype
+* Separated interface
+* registry
+* Value object
+* Money
+* Special case
+* Plugin
+* Service stub
+* Record Set
+
+
