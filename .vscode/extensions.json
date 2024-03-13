@@ -2,6 +2,7 @@
    "recommendations": [ 
      "redhat.vscode-yaml",
      "znck.grammarly",
-     "editorconfig.editorconfig"
+     "editorconfig.editorconfig",
+     "davidanson.vscode-markdownlint"
   ]
 } 
