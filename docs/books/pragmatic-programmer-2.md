@@ -4,7 +4,7 @@ tags: [book review, programming]
 
 # The Pragmatic Programmer (20th Anniversary Edition)
 
-*Last update: 06 Jan 2024*
+*Last update: 13 Mar 2024*
 
 
 <img align="left" src="../covers/pragmatic-programmer-2.png" alt="cover" height="200" />
@@ -21,11 +21,9 @@ Year: 2020
 
 <br/>
 
-The 20th anniverary edition of the book that was a milestone for the software development world in the 2000s.
-
-The basic idea of the book is to describe who is a "pragmatic" programmer, how they behave at work as human being and as professional software developers and why we should became pragmatic programmers.
-
-The first chapter is devoted to 
-
-TO BE COMPLETED
-
+Twenty years ago, the first edition of this book was fundamental to growing a new generation of software programmers.
+This new revision has been updated to be aligned with how the software development has evolved.
+A "pragmatic" programmer is a programmer who knows how to code (several chapters are dedicated to coding and software architectures) but is also able to work in a team and with the customer, contributing to the project's success.
+The book contains several suggestions and tips on how to behave as a human being, a programmer and a member of a project.
+It is not easy to read because most chapters are dense with concepts, ideas and suggestions, nevertheless, I firmly suggest it to everybody who wants to improve as a professional programmer.
+My preferred phrase from the book: "Testing, design, coding - it's all programming".
