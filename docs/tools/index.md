@@ -15,10 +15,10 @@
 
 ### Database
 
-* [IBM DB2](db-db2.md)
-* [PostgreSQL](db-postgresql.md)
-* [MySQL](db-mysql.md)
-* [MongoDB](db-mongodb.md)
+* [IBM DB2](db/db2.md)
+* [PostgreSQL](db/postgresql.md)
+* [MySQL](db/mysql.md)
+* [MongoDB](db/mongodb.md)
 
 ### Cloud / Kubernetes
 
