@@ -9,7 +9,7 @@
 
 ### Brokers - event streaming
 
-* Apache Kafka
+* [Apache Kafka](brokers/kafka.md)
 * RabbitMQ
 
 
