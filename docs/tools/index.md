@@ -7,6 +7,12 @@
 * [GIT](git.md)
 * [SubVersion - SVN](subversion.md)
 
+### Brokers - event streaming
+
+* Apache Kafka
+* RabbitMQ
+
+
 ### Database
 
 * [IBM DB2](db-db2.md)
