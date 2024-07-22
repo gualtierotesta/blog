@@ -6,7 +6,7 @@ tags:
 
 # GIT
 
-*Last update: 26 Jan 2023*
+*Last update: 22 Jul 2024*
 
 ### Basic commands
 
@@ -42,14 +42,32 @@ Rebase ignoring whitespace differences
 
     git rebase -v --ignore-whitespace
 
+Prefer `git rebase` over `git merge` to have a linear commit history and to avoid merge commits.
+
+## Commits
+
+Each commit should be consistent, encompassing a single reason for all changes.
+
+If there are multiple elements to modify or add, please use multiple commits.
+
+Commit messages should begin with an action verb in the imperative form such as “fix”, “update”, or “add”.
+
+Examples:
+
+    Update spring boot version to 3.2
+    Add configuration file for Prettier
+    Fix malformed URL creation
+
+For those who are non-native English speakers: avoid using past tense forms like “added …”, “updated …” or third person forms like "updates…, “fixes …”. Also, refrain from specifying the subject, such as “it adds…”.
 
 ### Aliases
 
-Some useful aliases
+Some useful shell aliases
 
     alias gf='git fetch -v'
     alias gr='git rebase -v --ignore-whitespace'
     alias gs='git status'
+    alias gl='git log --oneline --graph --decorate'
 
 ### Configuration
 
