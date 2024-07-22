@@ -64,7 +64,7 @@ For those who are non-native English speakers: avoid using past tense forms like
 
 Some useful shell aliases
 
-    alias gf='git fetch -v'
+    alias gf='git fetch --all --prune -v'
     alias gr='git rebase -v --ignore-whitespace'
     alias gs='git status'
     alias gl='git log --oneline --graph --decorate'
