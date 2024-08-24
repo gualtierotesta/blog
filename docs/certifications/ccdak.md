@@ -94,7 +94,5 @@ Kafka default security level is very low.
 
 * Encryption in transit is optional and off in the default configuration. Here transit means from producer to broker, between brokers, from broker to consumer)
 * Authentication and authoriation are options and off in the default configuration
-* Encryption at reset (partition segments) is now available in the standard Apache Kafka (available in the COnfluent version)
-  * Workround 1: encrypt the disk
-  * Workaround 2: encrypt/decrypt the messages using the producers/consumers
-* 
+* Encryption at reset (partition segments) is now available in the standard Apache Kafka (available in the Confluent version). Workaround 1: encrypt the disk. Workaround 2: encrypt/decrypt the messages using the producers/consumers
+  

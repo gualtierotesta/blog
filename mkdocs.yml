@@ -39,6 +39,7 @@ nav:
   - "About me": about.md
   - "Articles": articles/index.md
   - "Books reviews": books/index.md
+  - "Certifications": certifications/index.md
   - "Languages": languages/index.md
   - "Methodologies": methodologies/index.md
   - "Security": security/index.md
