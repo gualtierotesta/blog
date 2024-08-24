@@ -1,8 +1,8 @@
-{   
-   "recommendations": [ 
-     "redhat.vscode-yaml",
-     "znck.grammarly",
-     "editorconfig.editorconfig",
-     "davidanson.vscode-markdownlint"
+{
+  "recommendations": [
+    "redhat.vscode-yaml",
+    "editorconfig.editorconfig",
+    "davidanson.vscode-markdownlint",
+    "ltex-plus.vscode-ltex-plus"
   ]
-} 
+}
