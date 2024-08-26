@@ -1,8 +1,8 @@
 ---
-tags: [certification, aws, practioctioner, cloud]
+tags: [certification, aws, practitioner, cloud]
 ---
 
-# AWS Certified Cloud Practioner
+# AWS Certified Cloud Practitioner
 
 *Last update: 24 Ago 2024*
 
