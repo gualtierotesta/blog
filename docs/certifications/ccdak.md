@@ -23,16 +23,16 @@ Confluent is a private company that gives commercial/enterprise support and prov
 
 Key concepts:
 
-* events vs static data, flow ws storage. Kafka handle unlimited temporal series of events.
-* real time handling
-* events persistence
+* Events vs static data, flow vs storage. Kafka handle unlimited temporal series of events.
+* Real time handling
+* Events persistence
 
 An event streaming platform has 2 primary uses:
 
-* Stream processing: continuos real time data processing. Evolution of the Enterprise Messaging.
+* Stream processing: continuous real time data processing. Evolution of the Enterprise Messaging.
 * Data integration: flow of data changes to align systems. A sort of streaming ETL.
 
-Kafka solution is based on several componenents:
+Kafka solution is based on several components:
 
 * the `broker`, the Kafka instance in the cluster which has its own storage. Usually there are more than one broker in the cluster, for fault tolerance. 
 * the `cluster manager`, that controls the brokers cluster, handling brokers failures and recoveries
@@ -46,7 +46,7 @@ Within Kafka, events are saved in named topics.
 
 A broker is a Kafka instance running in a cluster.
 
-The broker configuration is stored in the `server.properties`file and it can be modified by command line arguments and the AdminClient API.
+The broker configuration is stored in the `server.properties`file, and it can be modified by command line arguments and the AdminClient API.
 
 Some configuration parameters are `read-only` because they require a broker restart.
 
@@ -58,7 +58,7 @@ A topic is a sequence (or stream) of events or messages. A broker can have an un
 
 A message has the following structure:
 
-* timestamp, when the messages has been created or reveived (ingested) by Kafka
+* timestamp, when the messages have been created or received (ingested) by Kafka
 * key, optional, the key of the message
 * value, the message body
 * headers, optional message metadata
@@ -67,11 +67,11 @@ Each topic is implemented in 1 or more `partitions`.
 
 Messages are distributed among the partitions using the hash of the message key. Messages with the same key are sent to the same partition. If the message does not have a key, the messages is sent to a random partition using a round-robin approach. It is also possible to define a custom partitioning logic.
 
-IMPORTANT: messages are not deleted after being consumed. They remain in the topic for 1 week (defaul value for the retention period). Business or legal considerations influence the retention period for all topics in a cluster and/or for a specific topic.
+IMPORTANT: messages are not deleted after being consumed. They remain in the topic for 1 week (default value for the retention period). Business or legal considerations influence the retention period for all topics in a cluster and/or for a specific topic.
 
-A topic can be defined as `compacted`: only the most recent message with the same key will be maintained in the topics while the less recents messages will be deleted.
+A topic can be defined as `compacted`: only the most recent message with the same key will be maintained in the topics while the less recent messages will be deleted.
 
-The topic configuration has broker levele defaults. It can be changed programmatically or via command line arguments.
+The topic configuration has broker-level defaults. It can be changed programmatically or via command line arguments.
 
 ## Partition
 
@@ -81,13 +81,13 @@ Each partition can have 0..N replicas, for fault tolerance. The number of replic
 
 The partitions are stored as files (`segments`) on the disk. No structured storage is required by Kafka.
 
-The messages are guaranteed to be in temporal order at patrition level but not a topic level.
+The messages are guaranteed to be in temporal order at partition level but not a topic level.
 
 Within a partition, each message has its own position number, a unique integer assigned by Kafka and used to track until where the consumers have read the messages. This is the partition offset.
 
 ## Infrastructure
 
-Kafka runs in a cluster of brokers. Each broker is a Kafka instance with its own storage. A broker can be a node, a virtual machine, a docker compose service o a pod in a kubernetes cluster.
+Kafka runs in a cluster of brokers. Each broker is a Kafka instance with its own storage. A broker can be a node, a virtual machine, a docker compose service o a pod in a Kubernetes cluster.
 
 Kafka cluster is managed by an external cluster manager, `ZooKeeper`, who requires its own cluster of instances. Later, another cluster manager, `KRaft`, has been introduced. KRaft runs inside the Kafka cluster, reducing the operational complexity.
 
@@ -97,7 +97,7 @@ Both ZooKeeper and KRaft implements a consensus protocol that establish who, amo
 
 A producer is an application that uses the Kafka Producer API to write events to Kafka topics.
 
-Producers writes to leader partition(s).
+Producers write to leader partition(s).
 
 Producer properties:
 
@@ -108,13 +108,13 @@ Producer properties:
 
 ## Consumer
 
-A consumer is an application that uses the kafka Consumer API to wait (via polling) for new messages arrive from 1..N topics. The consumer specify which topics is interested into.
+A consumer is an application that uses the Kafka Consumer API to wait (via polling) for new messages arrive from 1..N topics. The consumer specify which topics are interested into.
 
-Consumers work in groups and consumer groups are handled by Kafka. Each consumer group has a unique ID (`group id`). Every consumer with the same group id belong to the same group.
+Consumers work in groups and consumer groups are handled by Kafka. Each consumer group has a unique ID (`group id`). Every consumer with the same group ID belong to the same group.
 
-During the configuratiob phase, the Kafka consumer groups manager assign one or more partitions to each consumer in the same consumer group.
+During the configuration phase, the Kafka consumer groups manager assign one or more partitions to each consumer in the same consumer group.
 
-Consumers never stop; they run in a infinite loop waiting for the arrival if new messages.
+Consumers never stop; they run in an infinite loop waiting for the arrival if new messages.
 
 By default, consumers read from the leader partition but, in multi region/AZ/data center, it can be configured to read from partition followers.
 
@@ -132,22 +132,22 @@ Consumer properties:
 
 Kafka default security level is very low.
 
-* Encryption in transit is optional and off in the default configuration. Here transit means from producer to broker, between brokers, from broker to consumer)
-* Authentication and authoriation are options and off in the default configuration
+* Encryption in transit is optional and off in the default configuration. Here transit means from producer to broker, between brokers, from broker to consumer.
+* Authentication and authorization are options and off in the default configuration
 * Encryption at reset (partition segments) is now available in the standard Apache Kafka (available in the Confluent version). Workaround 1: encrypt the disk. Workaround 2: encrypt/decrypt the messages using the producers/consumers.
 
 ## Kafka Streams
 
 Java API included in Apache Kafka.
 
-It allows to create applications that run inside the Kafka cluster with a  "exactly-once" semantic. Streams can be stateful with the state managed by the Kafka cluster.
+It allows creating applications that run inside the Kafka cluster with an "exactly-once" semantic. Streams can be stateful with the state managed by the Kafka cluster.
 
 ## Kafka Connect
 
 It is a separate system with its own cluster. Its purpose is to:
 
 1. Read data from "sources", writing messages to Kafka topics
-2. Write data to "sinks", reading messages from kafka topics.
+2. Write data to "sinks", reading messages from Kafka topics.
 
 The Connect cluster has several workers that use Kafka REST API to integrate with Kafka. Each worker handle 1..N connections. The state of the Connect cluster is stored in a Kafka topic.
 
@@ -155,27 +155,27 @@ Each connector has its own configuration file and can have 1..N tasks.
 
 Structure: 1 connect cluster --> 1..N workers --> 1..N tasks
 
-Connectors can be single instance/thread or multi-instance distributed amonge the workers.
+Connectors can be single instance/thread or multi-instance distributed among the workers.
 
 ## Confluent REST Proxy
 
 REST API to produce and consume messages.
 
-It is developed and maintanied by Confluent and it is free to use.
+It is developed and maintained by Confluent, and it is free to use.
 
 ## Confluent Schema Registry
 
 It is a configuration server dedicated to message schemas stored in a dedicated Kafka topic.
 
-Producers mark the messages with a specific schema ID and the consumers check the message againts the schema from the registry before processing it.
+Producers mark the messages with a specific schema ID and the consumers check the message against the schema from the registry before processing it.
 
-It is developed and maintanied by Confluent and it is free to use.
+It is developed and maintained by Confluent, and it is free to use.
 
 ## Confluent KSQLDB
 
-KSQLDB allows to write SQL like queries that filter, join and aggregates stream data producing new streams.
+KSQLDB allows writing SQL like queries that filter, join and aggregates stream data producing new streams.
 
-KQSLDB queries never stops. They can be used to ceate real-time stream processing applications.
+KQSLDB queries never stops. They can be used to create real-time stream processing applications.
 
 KQSLDB runs on a dedicated server and expose its own REST API.
 
@@ -217,4 +217,4 @@ The brokers number in the cluster limit the replication factor: 3 brokers, max 3
 
 The number of consumers in the consume group limit the minimum number of partitions: 4 consumers, minimum 4 partitions.
 
-Also the memory (RAM) should be controlled.
+Also, the memory (RAM) should be controlled.
