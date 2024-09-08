@@ -1,10 +1,12 @@
 # About me
 
+![Gualtiero Testa](assets/images/gualtierotesta.jpg)
+
 Dad, husband, Italian. Software architect and developer. Blogger. Amateur photographer.
 
 Love code quality, testing and automation.
 
-My links:
+You can found me here:
 
 * [GitHub](https://github.com/gualtierotesta)
 * [LinkedIn](https://www.linkedin.com/in/gualtierotesta)
@@ -15,5 +17,4 @@ My links:
 * [Mastodon](@gualtierotesta@mastodon.uno)
 * [Credly](https://www.credly.com/users/gualtierotesta)
 
-![Gualtiero Testa](assets/images/gualtierotesta.jpg)
-*Note: the picture has been taken in Rapallo (GE), Italy*
+Note: the picture has been taken in Rapallo (GE), Italy.
