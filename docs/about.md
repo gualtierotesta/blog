@@ -1,6 +1,6 @@
 # About me
 
-![Gualtiero Testa](assets/images/gualtierotesta.jpg)
+![Gualtiero Testa](assets/images/gualtierotesta-small.jpg)
 
 Dad, husband, Italian. Software architect and developer. Blogger. Amateur photographer.
 
