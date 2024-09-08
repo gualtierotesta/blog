@@ -1,15 +1,19 @@
 # About me
 
-I am a software analyst, architect and developer involved in web-based applications, mainly Java Enterprise solutions in the Health, Insurance, Government and Banking domains.
+Dad, husband, Italian. Software architect and developer. Blogger. Amateur photographer.
 
-Test-Driven Development (TDD) and software testing methodologies and techniques are my main interests, without forgetting about coding and code quality.
+Love code quality, testing and automation.
 
-Follow me on [Mastodon](@gualtierotesta@mastodon.uno) and [Twitter](https://twitter.com/gualtierotesta)
+My links:
 
-My complete profile is on [LinkedIn](https://www.linkedin.com/in/gualtierotesta)
-
-I work and live close to Milan, Italy.
+* [GitHub](https://github.com/gualtierotesta)
+* [LinkedIn](https://www.linkedin.com/in/gualtierotesta)
+* [Website](https://gualtierotesta.github.io/blog)
+* [Medium](https://medium.com/@gualtierotesta)
+* [Goodreads](https://www.goodreads.com/gualtierotesta)
+* [Codewars](https://www.codewars.com/users/gualty)
+* [Mastodon](@gualtierotesta@mastodon.uno)
+* [Credly](https://www.credly.com/users/gualtierotesta)
 
 ![Gualtiero Testa](assets/images/gualtierotesta.jpg)
-
-Note: the picture has been taken in Rapallo (GE), Italy
+*Note: the picture has been taken in Rapallo (GE), Italy*
