@@ -2,6 +2,9 @@
 tags: [coding, java, maven, plugins, versions, pom.xml, super pom, maven-enforcer-plugin]
 ---
 
+This article is obsolete. You can find an updated and expanded version on [Medium](https://medium.com/@gualtierotesta/the-maven-enforcer-plugin-e45d68c0fa80).
+
+
 *Last update: 16 Dec 2018*
 
 The [Maven Enforcer Plugin](https://maven.apache.org/enforcer/maven-enforcer-plugin ) lets us define and, if required, enforce some environmental conditions like the:
