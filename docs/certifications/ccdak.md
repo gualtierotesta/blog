@@ -4,7 +4,7 @@ tags: [certification, confluent, kafka, apache]
 
 # Confluent Certified Developer for Apache KAFKA (CCDAK)
 
-*Last update: 25 Ago 2024*
+*Last update: 09 Oct 2024*
 
 ## References
 
@@ -34,7 +34,7 @@ An event streaming platform has 2 primary uses:
 
 Kafka solution is based on several components:
 
-* the `broker`, the Kafka instance in the cluster which has its own storage. Usually there are more than one broker in the cluster, for fault tolerance. 
+* the `broker`, the Kafka instance in the cluster which has its own storage. Usually there are more than one broker in the cluster, for fault tolerance.
 * the `cluster manager`, that controls the brokers cluster, handling brokers failures and recoveries
 * the `producers`, client applications that run outside the cluster and send events to the brokers
 * the `consumers`, client applications that run outside the cluster and receive (pull) events from the brokers
@@ -46,13 +46,13 @@ Within Kafka, events are saved in named topics.
 
 A broker is a Kafka instance running in a cluster.
 
-The broker configuration is stored in the `server.properties`file, and it can be modified by command line arguments and the AdminClient API.
+The broker configuration is stored in the `server.properties` file, and it can be modified by command line arguments and the `AdminClient` API.
 
 Some configuration parameters are `read-only` because they require a broker restart.
 
 Configurations are "per-broker" o "cluster-wide".
 
-## Topic and messages
+## Topics and messages
 
 A topic is a sequence (or stream) of events or messages. A broker can have an unlimited number of topics, each with a unique name.
 
@@ -65,7 +65,7 @@ A message has the following structure:
 
 Each topic is implemented in 1 or more `partitions`.
 
-Messages are distributed among the partitions using the hash of the message key. Messages with the same key are sent to the same partition. If the message does not have a key, the messages is sent to a random partition using a round-robin approach. It is also possible to define a custom partitioning logic.
+Messages are distributed among the partitions using the hash of the message key. Messages with the same key are sent to the same partition. If the message does not have a key, the messages are sent to a random partition using a round-robin approach. It is also possible to define a custom partitioning logic.
 
 IMPORTANT: messages are not deleted after being consumed. They remain in the topic for 1 week (default value for the retention period). Business or legal considerations influence the retention period for all topics in a cluster and/or for a specific topic.
 
@@ -77,7 +77,7 @@ The topic configuration has broker-level defaults. It can be changed programmati
 
 A partition is a log structure, an immutable and time ordered sequence of events; new events are always attached at the end of the partition.
 
-Each partition can have 0..N replicas, for fault tolerance. The number of replicas is the replication factor; its typical value is 3. Replicas are distributed across the brokers, with one as leader and the others as followers.
+Each partition can have 0 to N replicas, for fault tolerance. The number of replicas is the replication factor; its typical value is 3 because 3 is the typical number of brokers in the cluster. Replicas are distributed across the brokers, with one as leader and the others as followers.
 
 The partitions are stored as files (`segments`) on the disk. No structured storage is required by Kafka.
 
@@ -108,13 +108,13 @@ Producer properties:
 
 ## Consumer
 
-A consumer is an application that uses the Kafka Consumer API to wait (via polling) for new messages arrive from 1..N topics. The consumer specify which topics are interested into.
+A consumer is an application that uses the Kafka Consumer API to wait (via polling) for new messages arrive from 1 to N topics. The consumer specify which topics are interested into.
 
 Consumers work in groups and consumer groups are handled by Kafka. Each consumer group has a unique ID (`group id`). Every consumer with the same group ID belong to the same group.
 
 During the configuration phase, the Kafka consumer groups manager assign one or more partitions to each consumer in the same consumer group.
 
-Consumers never stop; they run in an infinite loop waiting for the arrival if new messages.
+Consumers never stop; they run in an infinite loop waiting for the arrival of new messages.
 
 By default, consumers read from the leader partition but, in multi region/AZ/data center, it can be configured to read from partition followers.
 
@@ -133,8 +133,8 @@ Consumer properties:
 Kafka default security level is very low.
 
 * Encryption in transit is optional and off in the default configuration. Here transit means from producer to broker, between brokers, from broker to consumer.
-* Authentication and authorization are options and off in the default configuration
-* Encryption at reset (partition segments) is now available in the standard Apache Kafka (available in the Confluent version). Workaround 1: encrypt the disk. Workaround 2: encrypt/decrypt the messages using the producers/consumers.
+* Authentication and authorization are optional and off in the default configuration
+* Encryption at rest (partition segments) is not available in the standard Apache Kafka, but it is available in the Confluent version. Workaround 1: encrypt the disk. Workaround 2: encrypt/decrypt the messages using the producers/consumers.
 
 ## Kafka Streams
 
@@ -149,11 +149,11 @@ It is a separate system with its own cluster. Its purpose is to:
 1. Read data from "sources", writing messages to Kafka topics
 2. Write data to "sinks", reading messages from Kafka topics.
 
-The Connect cluster has several workers that use Kafka REST API to integrate with Kafka. Each worker handle 1..N connections. The state of the Connect cluster is stored in a Kafka topic.
+The Connect cluster has several workers that use Kafka REST API to integrate with Kafka. Each worker handle 1 to N connections. The state of the Connect cluster is stored in a Kafka topic.
 
-Each connector has its own configuration file and can have 1..N tasks.
+Each connector has its own configuration file and can have 1 to N tasks.
 
-Structure: 1 connect cluster --> 1..N workers --> 1..N tasks
+Structure: 1 connect cluster --> 1 to N workers --> 1 to N tasks
 
 Connectors can be single instance/thread or multi-instance distributed among the workers.
 
