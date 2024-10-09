@@ -15,6 +15,14 @@ tags: [certification, confluent, kafka, apache]
 * [Spring Kafka](https://spring.io/projects/spring-kafka)
 * [Baeldung Kafka series](https://www.baeldung.com/apache-kafka-series)
 
+## Training
+
+On the Confluence Training platform, suggested (free) courses are:
+
+* Apache Kafka Fundamentals
+* Confluent Fundamentals Accreditation
+* Confluent Certified Bootcamp: Developer
+
 ## Introduction
 
 Apache Kafka is an open source product developed by LinkedIn and now under Apache Foundation.
