@@ -150,7 +150,7 @@ Java API included in Apache Kafka.
 
 It allows creating applications that run inside the Kafka cluster with an "exactly-once" semantic. Streams can be stateful with the state managed by the Kafka cluster.
 
-## Kafka Connect
+## Kafka Connect and Connectors
 
 It is a separate system with its own cluster. Its purpose is to:
 
@@ -164,6 +164,8 @@ Each connector has its own configuration file and can have 1 to N tasks.
 Structure: 1 connect cluster --> 1 to N workers --> 1 to N tasks
 
 Connectors can be single instance/thread or multi-instance distributed among the workers.
+
+Kafka Connectors are a set of ready-to-use components, maintained by Confluent or by the community.
 
 ## Confluent REST Proxy
 
