@@ -13,7 +13,7 @@ Key principles of DDD include:
 
 * `Ubiquitous Language`: A shared vocabulary used by developers, business analysts, and domain experts to communicate about the business domain.
 * `Bounded Contexts`: Defining boundaries around different parts of the system that have distinct responsibilities and can be modeled independently.
-* `Entities`: Entities represent the fundamental building blocks of your business domain. They have a unique identity that persists over time, even if their attributes change. This means that an entity remains the same object, even if its properties are updated. Entities have a state and a behaviour. Their life cycle (creation, update, deletion) is managed by the application.
+* `Entities`: Entities represent the fundamental building blocks of your business domain. They have a unique identity that persists over time, even if their attributes change. This means that an entity remains the same object, even if its properties are updated. Entities have a state and a behavior. Their life cycle (creation, update, deletion) is managed by the application.
 * `Aggregates`: Grouping related entities together into a cohesive unit that can be treated as a single object.
 * `Value Objects`: Objects that represent values rather than entities, such as money or color.
 * `Domain Events`: Capturing significant occurrences within the domain that can be used to trigger actions or updates in other parts of the system.
