@@ -1,10 +1,17 @@
 # About me
 
-![Gualtiero Testa](assets/images/gualtierotesta-small.jpg)
-
-Dad, husband, Italian. Software architect and developer. Blogger. Amateur photographer.
-
-Love code quality, testing and automation.
+<table style="border: none; font-size: 1em">
+  <tr>
+    <td><img src="../assets/images/gualtierotesta-small.jpg" alt="Image" style="width: 200px;"></td>
+    <td>
+        <p>Dad, husband, Italian. </p>
+        <p>Software architect and developer.</p>
+        <p>Blogger.</p>
+        <p>Amateur photographer.</p>
+        <p>Love code quality, testing and automation.</p>
+    </td>
+  </tr>
+</table>
 
 You can found me here:
 
