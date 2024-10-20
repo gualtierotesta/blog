@@ -14,7 +14,8 @@ You can found me here:
 * GitHub: [https://github.com/gualtierotesta](https://github.com/gualtierotesta)
 * Mastodon @gualtierotesta: [https://mastodon.uno/@gualtierotesta](https://mastodon.uno/@gualtierotesta)
 * Goodreads: [https://www.goodreads.com/gualtierotesta](https://www.goodreads.com/gualtierotesta)
-* Codewars: [https://www.codewars.com/users/gualty](https://www.codewars.com/users/gualty)[](https://www.codewars.com/users/gualty/badges/small)
+* Codewars: [https://www.codewars.com/users/gualty](https://www.codewars.com/users/gualty)
+* Codewars: <a href="https://www.codewars.com/users/gualty"><img src="https://www.codewars.com/users/gualty/badges/small" alt="Codewars Developer Badge" height="50"></a>
 * Credly: [https://www.credly.com/users/gualtierotesta](https://www.credly.com/users/gualtierotesta)
 * X / Twitter (@gualtierotesta): [https://x.com/gualtierotesta](https://x.com/gualtierotesta)
 
