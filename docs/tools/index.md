@@ -2,7 +2,7 @@
 
 ## Environments
 
-* [WSL2 on Windows 10/11](wsl)
+* [WSL2 on Windows 10/11](wsl/index.md)
 
 ## IDEs and clients
 
