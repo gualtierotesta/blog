@@ -11,6 +11,7 @@
 ## Version control systems
 
 * [GIT](git.md)
+* [GIT-CRYPT](git-crypt.md)
 * [SubVersion - SVN](subversion.md)
 
 ## Brokers - event streaming
