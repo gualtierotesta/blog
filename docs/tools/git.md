@@ -6,7 +6,7 @@ tags:
 
 # GIT
 
-*Last update: 22 Jul 2024*
+*Last update: 12 Nov 2024*
 
 ### Basic commands
 
@@ -21,7 +21,7 @@ To create the initial repository:
     git init
 
 Add a new file or update it in the stage
-    
+
     git add
 
 Commit (staged files)
@@ -98,7 +98,6 @@ The .gitignore file
     .gitignore            # for the current repo
     ~/.config/git/ignore  # for all repos
 
-
 ### Logging
 
 Basic logging:
@@ -125,7 +124,6 @@ Compare two branches
 
     git log --left-right --graph --cherry-pick --oneline branch1...branch2
 
-
 ### Tags
 
 Create a new tag
@@ -139,7 +137,6 @@ Push tags
 List tags ordered by creation date
 
     git for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags
-
 
 ### Branches
 
@@ -166,7 +163,6 @@ Remove all local commits and changes and reset the local branch to the remote br
 
     git reset --hard @{u}
 
-
 ### Special commands
 
 GIT internal DB maintenance:
@@ -191,3 +187,12 @@ Create a second remote repository
     git remote set-url --add  --push backup  URL
     git push backup <branch-name>
 
+Change the committer email (DANGEROUS):
+
+    git filter-branch -f --env-filter '
+    if [ "$GIT_COMMITTER_EMAIL" = "old-email" ];
+    then
+        export GIT_COMMITTER_EMAIL="new-email"
+        export GIT_AUTHOR_EMAIL="new-email"
+    fi
+    ' HEAD
