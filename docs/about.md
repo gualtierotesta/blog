@@ -23,6 +23,5 @@ You can found me here:
 * Goodreads: [https://www.goodreads.com/gualtierotesta](https://www.goodreads.com/gualtierotesta)
 * Codewars: <a href="https://www.codewars.com/users/gualty"><img src="https://www.codewars.com/users/gualty/badges/micro" alt="Codewars Developer Badge" ></a>
 * Credly: [https://www.credly.com/users/gualtierotesta](https://www.credly.com/users/gualtierotesta)
-* X / Twitter (@gualtierotesta): [https://x.com/gualtierotesta](https://x.com/gualtierotesta)
 
 Note: the picture has been taken in Rapallo (GE), Italy.
