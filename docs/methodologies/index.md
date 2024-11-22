@@ -7,4 +7,4 @@ Articles and personal notes on the software development methodologies I use, or 
 
 * [Refactoring](refactoring.md)
 * [Domain Driven Design](ddd.md)
-* 
+* [C4 Model](c4-model.md)
