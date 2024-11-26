@@ -13,6 +13,8 @@
   </tr>
 </table>
 
+## Links
+
 You can found me here:
 
 * Personal site: [https://gualtierotesta.github.io/blog](https://gualtierotesta.github.io/blog)
@@ -23,5 +25,14 @@ You can found me here:
 * Goodreads: [https://www.goodreads.com/gualtierotesta](https://www.goodreads.com/gualtierotesta)
 * Codewars: <a href="https://www.codewars.com/users/gualty"><img src="https://www.codewars.com/users/gualty/badges/micro" alt="Codewars Developer Badge" ></a>
 * Credly: [https://www.credly.com/users/gualtierotesta](https://www.credly.com/users/gualtierotesta)
+
+## Certifications
+
+| When    | What                                  |
+| ------- | ------------------------------------- |
+| 2024.11 | Auth0 Consumer Application Operations |
+| 2024.11 | Auth0 Consumer Application Prototypes |
+| 2024.10 | Auth0 fundamentals                    |
+
 
 Note: the picture has been taken in Rapallo (GE), Italy.
