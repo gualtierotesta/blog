@@ -70,3 +70,9 @@ The other users of the repository should clone the project and run the following
     git-crypt unlock
 
 git-crypt will use the user GPG key(s) to unlock the repo.
+
+## Other commands
+
+To check if git-crypt has been configured correctly and all sensitive files are encrypted:
+
+    git-crypt status
