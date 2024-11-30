@@ -8,16 +8,28 @@ tags:
 
 # GIT CRYPT
 
-*Last update: 12 Nov 2024*
+*Last update: 30 Nov 2024*
 
 ## Introduction
 
-[git-crypt](https://github.com/AGWA/git-crypt) is a encryption/decryption tool integrated with git.
+[git-crypt](https://github.com/AGWA/git-crypt) is an encryption/decryption tool integrated with git.
 
 It works under two modes:
 
 1. Symmetric key
 2. GPG key
+
+## Installation
+
+git-crypt binaries for Windows and Linux are available from the [project repository on GitHub](https://github.com/AGWA/git-crypt/releases).
+
+On macOS, you can use brew:
+
+    brew install git-crypt
+
+For other installation instructions, you can refer to the [official documentation](https://github.com/AGWA/git-crypt/blob/master/INSTALL.md).
+
+## Configuration
 
 We use the `.gitattributes` file to define which files in the repo should be encrypted:
 
