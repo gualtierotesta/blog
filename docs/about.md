@@ -33,7 +33,8 @@ You can found me here:
 | 2024.11 | Auth0 Consumer Application Operations |
 | 2024.11 | Auth0 Consumer Application Prototypes |
 | 2024.10 | Auth0 fundamentals                    |
-| 2024.05 | AWS Certified Cloud Practitioner      |
+| 2024.06 | AWS Certified Cloud Practitioner      |
+| 2024.06 | Confluent Fundamentals Accreditation  |
 | 2024.04 | OKTA CIC Presales Accreditation       |
 | 2023.12 | Auth0 Certified Developer             |
 | 2021.04 | Oracle Java SE 11 Developer           |
