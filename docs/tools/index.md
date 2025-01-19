@@ -7,6 +7,7 @@
 ## IDEs and clients
 
 * [Bruno](ide/bruno.md)
+* [VSCode](ide/vscode.md)
   
 ## Version control systems
 
