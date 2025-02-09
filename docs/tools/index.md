@@ -11,7 +11,7 @@
 
 ## Setup
 
-* [SDKMan](setup/sdkman.md)
+* [SDKMAN!](setup/sdkman.md)
 
 ## Version control systems
 
