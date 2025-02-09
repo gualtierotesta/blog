@@ -1,0 +1,720 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Gualtiero Testa">
+      
+      
+        <link rel="canonical" href="https://gualtierotesta.github.io/blog/articles/java-ee-schedulers/">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.3">
+    
+    
+      
+        <title>Java EE Schedulers - Sharing developer experiences</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-Z08MZGHK67"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-Z08MZGHK67",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-Z08MZGHK67",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#java-ee-schedulers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sharing developer experiences" class="md-header__button md-logo" aria-label="Sharing developer experiences" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sharing developer experiences
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Java EE Schedulers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sharing developer experiences" class="md-nav__button md-logo" aria-label="Sharing developer experiences" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    Sharing developer experiences
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    About me
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Articles
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../books/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Books reviews
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../certifications/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Certifications
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Languages
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodologies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Methodologies
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Security
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../my-books/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    My books
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+        <span class="md-tag">@Schedule</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">@Singleton</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">@Startup</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">@Timeout</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">calendar</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">cron</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">github</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">java</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">javaee</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">quartz</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">scheduler</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">timer service</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">websphere</span>
+      
+    
+  </nav>
+
+
+
+<h1 id="java-ee-schedulers">Java EE Schedulers</h1>
+<p><em>Last update: 22 Sep 2018</em></p>
+<p>Java EE application servers have native scheduling support and, in most of the applications, there is no need to include external dependencies like the famous <a href="http://www.quartz-scheduler.org/">Quartz scheduler</a> library.</p>
+<p>The <a href="http://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html">Java EE 6 Timer Service</a>, available on Java EE 6 and 7 full profile, gives us many options to define the scheduling interval and what happens if we stop and restart the application which contains our scheduler.</p>
+<p>A Java EE scheduler can be:</p>
+<ul>
+<li><strong>persistent</strong>: the application server saves the scheduling events when the application is down to not lose them</li>
+<li><strong>automatic</strong>: simple scheduler definition, most of the details are handled by the application server</li>
+<li><strong>programmatic</strong>: we have full control of all scheduler parameters.</li>
+</ul>
+<p>To decide which is the best option, we should first answer the following questions:</p>
+<h1 id="is-it-allowed-to-miss-some-scheduling-events">Is it allowed to miss some scheduling events?</h1>
+<p>If we stop or restart the application (for example during an update) the scheduler will be stopped and some scheduling events could be lost.</p>
+<p>The scheduler can be configured to save the missed events and execute them when the application will be up again. The application server uses an internal database (it is usually a Java DB like Derby) to store the missed events.</p>
+<p>This is a persistent scheduler.</p>
+<p><strong>Note</strong>: the application server will generate all missed events at application (re)start. This burst of events is configurable in frequency and delay. See your application server documentation for the details.</p>
+<p>We have also the option to not persist the scheduling events which will be lost if the application is not running.</p>
+<p>In the not persistent case, the scheduler life cycle is the same as the application: it is created at application startup and then destroyed at application shutdown.</p>
+<p>On the contrary, a persistent scheduler survives the application restarts; it is simply sleeping when the application is not running.</p>
+<p>How to choose?</p>
+<p>If the scheduled functionality is business-critical and we cannot afford to miss an event, the persistent scheduler is the way to go.</p>
+<p>In all other cases, the not persistent scheduler is lighter (no DB is used) and easier to manage (less hurdle when updating the application because there is no burst of scheduling events at application restart; the scheduler is always created new at application start ).</p>
+<h1 id="will-the-application-run-in-a-cluster">Will the application run in a cluster?</h1>
+<p>In a cluster, more than one instance of our application is running (one instance per cluster node) and all instances have their copy of our scheduler.</p>
+<p>But we need to have just one scheduler running among all cluster nodes otherwise we will have multiple copies of the same event.</p>
+<p>Every application server has its way to handle the "multiple scheduler instances" problem (for example see [link 2] for WebSphere) but, in general, it is required that the scheduler should be persistent when we are using a cluster.</p>
+<h1 id="should-the-scheduling-interval-be-programmable-at-production">Should the scheduling interval be programmable at production?</h1>
+<p>Another important question to be answered: should we be able to change the scheduling after the application has been deployed?</p>
+<p>If the scheduling parameters (its frequency) are fixed, the automatic scheduler is the best solution because very simple to code: just one annotation (or a few XML lines if you prefer the old way).</p>
+<p>On the contrary, if the scheduler should be somehow configurable, the best solution is the programmatic scheduler which allows us to define all scheduler parameters during the application startup, reading them from a property file, a DB or any configuration solution we are using.</p>
+<p>Remember:</p>
+<ul>
+<li>the automatic scheduler schedule is defined at build time</li>
+<li>the programmatic scheduler schedule is defined at the application start time</li>
+</ul>
+<h1 id="automatic-scheduler">Automatic scheduler</h1>
+<p>It's very easy to define an automatic scheduler:</p>
+<ol>
+<li>Create a singleton EJB executed at the startup</li>
+<li>Create a method that will be invoked at every scheduling event</li>
+</ol>
+<p>Note: the complete code can be found in the article project [see link 3].</p>
+<p>First step:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nd">@Startup</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nd">@Singleton</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyScheduler</span>
+</code></pre></div>
+<p>The <code>@javax.ejb.Startup</code> annotation asks the EJB container to create the EJB (and so our scheduler) at application startup.</p>
+<p>The <code>@javax.ejb.Singleton</code> annotation forces the EJB container to create just one instance.</p>
+<p>Important: the scheduler is used by the application server (the EJB container); it should be never instantiated by the rest of the application code.</p>
+<p>Then we need the method which will be invoked at scheduling events:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nd">@Schedule</span><span class="p">(</span><span class="cm">/** scheduling parameters */</span><span class="p">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doSomeThing</span><span class="p">()</span><span class="w"> </span><span class="p">{..}</span>
+</code></pre></div>
+<p>The method should be public and return void.</p>
+<p>The <code>@javax.ejb.Schedule</code> annotation defines:</p>
+<ul>
+<li>the scheduling interval, in cron format, see link [4]</li>
+<li>the name of the scheduler (you could have many schedulers in the application)</li>
+<li>a persistent boolean flag which defines if the scheduler is persistent or not</li>
+</ul>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nd">@Schedule</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="n">minute</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;*/15&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">hour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;*&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;15MinScheduler&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">persistent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">)</span>
+</code></pre></div>
+<p>which defines a non-persistent scheduler that runs every 15 minutes.</p>
+<p>See <code>AutomaticPersistentScheduler</code> and <code>AutomaticNonPersistentScheduler</code> classes in the article project [link 3] for a complete example.</p>
+<p><strong>Note</strong>: there is also the <code>@Schedules</code> annotation [see link 1] which allows the define multiple @Schedule definitions.</p>
+<p>It is useful when there are schedule requirements that cannot be expressed in a single cron definition.</p>
+<h1 id="programmatic-scheduler">Programmatic scheduler</h1>
+<p>The programmatic scheduler is more complex to build but it gives us the complete freedom to define the scheduler parameters.</p>
+<p>We have more steps:</p>
+<ol>
+<li>Create a singleton EJB executed at the startup</li>
+<li>Lookup the TimerService resource</li>
+<li>Create the scheduler at EJB initialization</li>
+<li>Create a @Timeout method</li>
+</ol>
+<p>The first step is the same as the automatic scheduler:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nd">@Startup</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nd">@Singleton</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyScheduler</span>
+</code></pre></div>
+<p>Then (second step) we need to lookup the application server timer service but the injection helps us:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nd">@Resource</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kd">private</span><span class="w"> </span><span class="n">TimerService</span><span class="w"> </span><span class="n">timerService</span><span class="p">;</span>
+</code></pre></div>
+<p>At application startup, the EJB container will inject a <code>TimerService</code> instance which allows us to interact with the Timer service. For example, we can list (and even delete) all schedulers defined for the application.</p>
+<p>In our case, the Timer service will be used to create the new scheduler as follows (third step):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">String</span><span class="w"> </span><span class="n">minuteSchedule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;*/15&quot;</span><span class="p">;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">String</span><span class="w"> </span><span class="n">hourSchedule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;*&quot;</span><span class="p">;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">ScheduleExpression</span><span class="w"> </span><span class="n">schedule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ScheduleExpression</span><span class="p">()</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="p">.</span><span class="na">minute</span><span class="p">(</span><span class="n">minuteSchedule</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="p">.</span><span class="na">hour</span><span class="p">(</span><span class="n">hourSchedule</span><span class="p">);</span>
+</code></pre></div>
+<p>The <code>javax.ejb.ScheduleExpression</code> defines the cron [see link 4] schedule like the <code>@Schedule</code> annotation.</p>
+<p>The very important difference between <code>@Schedule</code> and <code>ScheduleExpression</code> is that the first one is fixed at build time: to change the schedule parameters (for example, from every 15min to every 30min) we need to change the class code and build and deploy again the application.</p>
+<p>In the latter case (SchedulerExpression), the schedule parameters (in the example above
+the variables minuteSchedule and hourSchedule ) can be defined and changed at
+application startup, reading the minuteSchedule and hourSchedule from, for example,
+a property file or a connected DBMS.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">TimerConfig</span><span class="w"> </span><span class="n">timerConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TimerConfig</span><span class="p">();</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">timerConfig</span><span class="p">.</span><span class="na">setInfo</span><span class="p">(</span><span class="s">&quot;ProgrammaticPersistentScheduler&quot;</span><span class="p">);</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">timerConfig</span><span class="p">.</span><span class="na">setPersistent</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</code></pre></div>
+<p>The <code>javax.ejb.TimerConfig</code> gives us the option to define the name of the scheduler (<code>setInfo(String)</code>) and if it is persistent or not ( <code>setPersistent(boolean)</code> ) .</p>
+<p>Using the <code>ScheduleExpression</code> and the <code>TimerConfig</code> instance, we can use the Timer service
+to create the scheduler ( a calendar timer, to be more precise).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">timerService</span><span class="p">.</span><span class="na">createCalendarTimer</span><span class="p">(</span><span class="n">schedule</span><span class="p">,</span><span class="w"> </span><span class="n">timerConfig</span><span class="p">);</span>
+</code></pre></div>
+<p>The <code>createCalendarTime()</code> method returns a <code>javax.ejb.</code>Timer` instance can be used to interrogate the timer like when the next future event will happen or even destroy the scheduler.</p>
+<p>The last step is to define a method in the class which will be invoked at every scheduling event</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nd">@Timeout</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doSomeThing</span><span class="p">()</span><span class="w"> </span><span class="p">{..}</span>
+</code></pre></div>
+<p>The method should be public and return void.</p>
+<p>And we have our scheduler up and running.</p>
+<h1 id="conclusions">Conclusions</h1>
+<p>Java EE standard gives us many options to define a scheduler that runs our code in a periodical and repetitive way. There is no need for additional project dependencies.</p>
+<h1 id="links">Links</h1>
+<ol>
+<li><a href="http://docs.oracle.com/javaee/6/tutorial/doc/bnboy.html">Oracle Java EE6 Tutorial on the Timer Service API</a></li>
+<li><a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.nd.doc/ae/tejb_timerserviceejb_enh.html">IBM WebSphere 8.x Creating timers using the EJB timer service for enterprise beans</a></li>
+<li><a href="https://github.com/gualtierotesta/ee-scheduler">Article project on GitHub</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Cron">Cron on Wikipedia</a></li>
+</ol>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["search.highlight", "search.suggest", "content.tabs.link", "content.code.annotate", "navigation.instant"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  </body>
+</html>

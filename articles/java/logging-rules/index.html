@@ -1,0 +1,685 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Gualtiero Testa">
+      
+      
+        <link rel="canonical" href="https://gualtierotesta.github.io/blog/articles/java/logging-rules/">
+      
+      
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.3">
+    
+    
+      
+        <title>The 5 Java logging rules - Sharing developer experiences</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d7758b05.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-Z08MZGHK67"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-Z08MZGHK67",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-Z08MZGHK67",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-5-java-logging-rules" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Sharing developer experiences" class="md-header__button md-logo" aria-label="Sharing developer experiences" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sharing developer experiences
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The 5 Java logging rules
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Sharing developer experiences" class="md-nav__button md-logo" aria-label="Sharing developer experiences" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Sharing developer experiences
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    About me
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Articles
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../books/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Books reviews
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../certifications/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Certifications
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Languages
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../methodologies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Methodologies
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../security/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Security
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../my-books/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    My books
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rule-1-logging-is-for-readers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule 1. Logging is for readers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rule-2-match-the-logging-levels-with-the-execution-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule 2. Match the logging levels with the execution environment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rule-3-remove-coding-help-logging-before-the-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule 3. Remove coding help logging before the commit.
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rule-4-check-log-level-before-logging-debug-messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule 4: Check log level before logging DEBUG messages
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rule-5-know-your-logger" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule 5: Know your logger
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+        <span class="md-tag">coding</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">java</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">jul</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">log levels</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">logging</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">production</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">rules</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">slf4j</span>
+      
+    
+  </nav>
+
+
+
+<h1 id="the-5-java-logging-rules">The 5 Java logging rules</h1>
+<p><em>Last update: 08 Sep 2022</em></p>
+<p>Logging is a critical factor that should be always kept into account during software development.</p>
+<p>When something bad happens in production, the log files are usually the starting point of our fault analysis. And, often, they are the only information in our hands to understand what is happening and which is the root cause of the problem.</p>
+<p>It is so very important to have the required information logged properly.</p>
+<p>The following five logging rules are a way to check and, possibly, improve how we handle the logging in our code.</p>
+<p>Please note that we will not discuss how to configure a logging engine nor we will compare them to each other.</p>
+<h2 id="rule-1-logging-is-for-readers">Rule 1. Logging is for readers</h2>
+<p>The logging messages should be meaningful to who will read the log files, not only to who wrote the (logging) code.</p>
+<p>It seems a very obvious rule but it is often violated.</p>
+<p>For example, let's consider a log message like the following</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ERROR: Save failure - SQLException stack trace .....
+</code></pre></div>
+<p>Saving what? This message could mean something to the developer but it is completely useless for the poor guy which is looking at the production problem.</p>
+<p>A much better message is</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ERROR: Save failure - Entity=Person, Data=[id=123 surname=&quot;Mario&quot;] - SQLException stack trace....
+</code></pre></div>
+<p>which explains what you wanted to save (here a Person, a JPA entity) and the relevant contents of the Person instance. Please note the word <code>relevant</code>, instead of the word <code>all</code>: we should not clutter log files with useless info like the complete print of all entity fields. </p>
+<p>Entity name and its logical keys are usually enough to identify a record in a table.</p>
+<h2 id="rule-2-match-the-logging-levels-with-the-execution-environment">Rule 2. Match the logging levels with the execution environment</h2>
+<p>All logging facades and engines available in the Java ecosystem have the concept of logging level (ERROR, INFO...), with the possibility to filter out messages with a too low level.</p>
+<p>For example, the Java Util Logging (JUL) engine that is included in the JDK, uses the following levels: SEVERE, WARN, INFO, FINE, FINER, FINEST (+ CONFIG and OFF).</p>
+<p>On the contrary, the two most popular logging <a href="https://en.wikipedia.org/wiki/Facade_pattern">facade</a>, Apache Commons Logging and SLF4J, prefer the following levels: FATAL, ERROR, WARN, INFO, DEBUG, and TRACE.</p>
+<p>Logging level filtering should depend on which stage of the development is your code: logging level in the production should not be the same as in test/integrations environments.</p>
+<p>Moreover, the logging level should also depend on the code owner. In general, our application code should have more detailed logging compared to any third-party library we are using. There is usually no big meaning to see, for example, Google Guava library debug messages in our log files.</p>
+<p>I usually configure the logging as follows:</p>
+<ul>
+<li><strong>Production</strong>: INFO level for my code and WARN for third-party libraries.</li>
+<li><strong>Test/Integration</strong>: DEBUG level for my code and WARN (or INFO if needed) for third-party libraries.</li>
+<li><strong>Development</strong>: whatever makes sense</li>
+</ul>
+<p>You should choose the logging strategy that better fit your requirements. </p>
+<p>Note: many application servers allow to change the logging configuration at runtime. In a production environment, you can temporarily enable DEBUG messages during a debug session and disable them when the session is finished.</p>
+<p>I discourage the use of the TRACE/FINEST level (and I'm not alone, see for example <a href="https://www.slf4j.org/faq.html#trace">here</a>). I don't see a big difference between DEBUG and TRACE and it is usually difficult for the young members of the team to decide which one, DEBUG or TRACE, to use. </p>
+<p>Following the <a href="https://en.wikipedia.org/wiki/KISS_principle">Kiss</a> principle, I suggest using ERROR, WARN, INFO and DEBUG levels only.</p>
+<h2 id="rule-3-remove-coding-help-logging-before-the-commit">Rule 3. Remove coding help logging before the commit.</h2>
+<p>While coding, we usually add logging messages, using the logger or the System.out, in our code for a better understanding of what it is happening in our application during execution /debugging sessions.</p>
+<p>Something like:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">aMethod</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">aParam</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">        </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">debug</span><span class="p">(</span><span class="err">“</span><span class="n">Enter</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">aMethod</span><span class="err">”</span><span class="p">);</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="err">“</span><span class="n">no</span><span class="err">”</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">aParam</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">           </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">debug</span><span class="p">(</span><span class="err">“</span><span class="n">User</span><span class="w"> </span><span class="n">says</span><span class="w"> </span><span class="n">no</span><span class="err">”</span><span class="p">);</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">          </span><span class="err">…</span><span class="p">.</span>
+</code></pre></div>
+<p>The main purpose of these messages is to trace application behaviour by showing which method is invoked and by dumping internal variables and method parameter values. Quite popular among non <a href="https://en.wikipedia.org/wiki/Test-driven_development">TDD</a> devotes.</p>
+<p>Unfortunately, these messages do not have usually a big meaning once the code has been released (to test and then production).</p>
+<p>So this rule simply says: once you have finished developing, remove all temporary and unnecessary logging messages just before committing the code to the SCM system (git, svn..) in use.</p>
+<p>This rule does not require removing all DEBUG messages but only the ones that do not have meaning once the application is completed and released; in other words when we are reasonably sure that the application is working properly.</p>
+<h2 id="rule-4-check-log-level-before-logging-debug-messages">Rule 4: Check log level before logging DEBUG messages</h2>
+<p>According to Rule 2, in the production log files, we will show ERROR, WARN and INFO messages only but in our code, we can have many DEBUG messages that should not affect production execution.</p>
+<p>Every time you want to log a DEBUG message (all the ones which remain after rule 3), add in front a check if DEBUG logging is enabled:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">isDebugEnabled</span><span class="p">()</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">        </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">debug</span><span class="w"> </span><span class="p">(</span><span class="err">……</span><span class="p">.)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="p">}</span>
+</code></pre></div>
+<p>This will prevent your code to build the log messages and call the logger. It is for efficiency in the program execution at production.</p>
+<h2 id="rule-5-know-your-logger">Rule 5: Know your logger</h2>
+<p>How we use the logger methods can have a significant cost:</p>
+<ul>
+<li>To build the message string</li>
+<li>to collect the data to be included in the message string</li>
+</ul>
+<p>We should review the JavaDoc of the selected logging facade/engine and understand the most efficient way to use its logger.</p>
+<p>For example, we could create a message like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="err">“</span><span class="n">Person</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="err">“</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">person</span><span class="p">.</span><span class="na">getName</span><span class="p">());</span>
+</code></pre></div>
+<p>which creates a few unnecessary string instances.</p>
+<p>Using SLF4J, the correct use is :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">    </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="err">“</span><span class="n">Person</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="p">{}</span><span class="err">“</span><span class="p">,</span><span class="w"> </span><span class="n">person</span><span class="p">.</span><span class="na">getName</span><span class="p">());</span>
+</code></pre></div>
+<p>where the format string is constant and the final message is built only if logging is enabled. See <a href="http://slf4j.org/faq.html#logging_performance">here</a> for more details.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["search.highlight", "search.suggest", "content.tabs.link", "content.code.annotate", "navigation.instant"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  </body>
+</html>

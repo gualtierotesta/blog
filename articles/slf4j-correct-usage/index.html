@@ -1,0 +1,703 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Gualtiero Testa">
+      
+      
+        <link rel="canonical" href="https://gualtierotesta.github.io/blog/articles/slf4j-correct-usage/">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.3">
+    
+    
+      
+        <title>SLF4J correct usage - Sharing developer experiences</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-Z08MZGHK67"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-Z08MZGHK67",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-Z08MZGHK67",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#slf4j-correct-usage" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sharing developer experiences" class="md-header__button md-logo" aria-label="Sharing developer experiences" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sharing developer experiences
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SLF4J correct usage
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sharing developer experiences" class="md-nav__button md-logo" aria-label="Sharing developer experiences" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    Sharing developer experiences
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    About me
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Articles
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../books/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Books reviews
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../certifications/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Certifications
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../languages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Languages
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodologies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Methodologies
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Security
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../my-books/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    My books
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+        <span class="md-tag">coding</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">exception</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">findbugs</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">java</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">logging</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">plugin</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">slf4j</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">spotbugs</span>
+      
+    
+  </nav>
+
+
+
+<h1 id="slf4j-correct-usage">SLF4J correct usage</h1>
+<p><em>Last update: 22 Set 2018</em></p>
+<p><a href="https://www.slf4j.org/">SLF4J</a> is a very popular logging facade but, like all libraries we use, there is a chance that we use it in a wrong or at least in a not optimal way.</p>
+<p>In this tutorial, we will list common logging errors and how we can detect them using FindBugs. We will also mention PMD and Sonar Squid checks when relevant.</p>
+<p>We will use two external FindBugs plugins which add logging detectors to FindBugs.</p>
+<p>The first one is a <a href="http://kengotoda.github.io/findbugs-slf4j/">SLF4J only plugin</a> by Kengo Toda which contains SLF4J detectors only.</p>
+<p>The second plugin is the popular <a href="http://fb-contrib.sourceforge.net/">FB Contrib</a> which contains, among many others, some logging detectors.</p>
+<p>For how to use FindBugs plugins, please refer to the following posts:</p>
+<ul>
+<li><a href="https://gualtierotesta.wordpress.com/2015/06/14/tutorial-using-findbugs-with-maven/">Using FindBugs with Maven</a></li>
+<li><a href="https://gualtierotesta.wordpress.com/2015/06/07/findbugs-plugins/">NetBeans FindBugs plugin</a></li>
+</ul>
+<p>Note: in all examples, we will assume the following imports:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.slf4j.Logger</span><span class="p">;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.slf4j.LoggerFactory</span><span class="p">;</span>
+</code></pre></div>
+<h1 id="1-logger-definition">1. Logger definition</h1>
+<p>Wrong way:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">W1a</span><span class="p">.</span><span class="w"> </span><span class="n">Logger</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="n">MyClass</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">W1b</span><span class="p">.</span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="n">Logger</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="n">MyClass</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">W1c</span><span class="p">.</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Logger</span><span class="w"> </span><span class="n">LOGGER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="n">AnotherClass</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+</code></pre></div>
+<p>Correct way:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">C1a</span><span class="p">.</span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Logger</span><span class="w"> </span><span class="n">LOGGER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="n">MyClass</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">C1b</span><span class="p">.</span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Logger</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="n">getClass</span><span class="p">());</span>
+</code></pre></div>
+<p><em>General rule</em>: the logger should be final and private because there are no reasons to share it with other classes or to re-assign it.</p>
+<p>On the contrary, there is no general agreement if the logger should be static or not. SLF4J plugin favors non static version (C1b) while PMD (“LoggerIsNotStaticFinal” rule) and Sonar (squid rule S1312) prefer a static logger (C1a) so both options should be considered valid.</p>
+<p>Additional info:</p>
+<ul>
+<li><a href="http://slf4j.org/faq.html#declared_static">SLF4J FAQ</a></li>
+<li><a href="http://wiki.apache.org/commons/Logging/StaticLog">Apache Commons Static Log</a>.</li>
+</ul>
+<p>Please note that</p>
+<ul>
+<li>
+<p>in the static version (C1a), the logger name is usually in uppercase characters as all constant fields. If not, PMD will report a “VariableNamingConventions” violation.</p>
+</li>
+<li>
+<p>in both cases, the suggested name is “logger/LOGGER” and not “log/LOG” because some naming conventions avoid too short names (less than four characters). Moreover, log is the verb, more suited for a method name.</p>
+</li>
+<li>
+<p>the W1c is wrong because we are referring to a class (AnotherClass) that is not the class where the logger is defined. In 99% of the cases, this is due to a copy &amp; paste from one class to another.</p>
+</li>
+</ul>
+<p>Related FindBugs (SLF4J plugin) checks:</p>
+<ul>
+<li>SLF4J_LOGGER_SHOULD_BE_PRIVATE</li>
+<li>SLF4J_LOGGER_SHOULD_BE_NON_STATIC</li>
+<li>SLF4J_LOGGER_SHOULD_BE_FINAL</li>
+<li>SLF4J_ILLEGAL_PASSED_CLASS</li>
+</ul>
+<h1 id="2-format-string">2. Format string</h1>
+<p>Wrong way:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">W2a</span><span class="p">.</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Obj=&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">myObj</span><span class="p">);</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">W2b</span><span class="p">.</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="err">“</span><span class="n">Obj</span><span class="o">=%</span><span class="n">s</span><span class="err">”</span><span class="p">,</span><span class="w"> </span><span class="n">myObj</span><span class="p">));</span>
+</code></pre></div>
+<p>Correct way:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">C2</span><span class="p">.</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Obj={}&quot;</span><span class="p">,</span><span class="n">myObj</span><span class="p">);</span>
+</code></pre></div>
+<p><em>General rule</em>: the format string (the first argument) should be constant, without any string concatenation. Dynamic contents (the myObj value in the example) should be added using the placeholders (the '{}' ).</p>
+<p>Motivation is simple: we should delay logging message creation <strong>after</strong> the logger has established if the message should be logged or not, depending on the current logging level. If we use string concatenation, the message is built anyway, regardless of the logging level which is a waste of CPU and memory resources.</p>
+<p>Related FindBugs (SLF4J plugin) checks:</p>
+<ul>
+<li>SLF4J_FORMAT_SHOULD_BE_CONST Format should be constant</li>
+<li>SLF4J_SIGN_ONLY_FORMAT Format string should not contain placeholders only</li>
+</ul>
+<p>Related FindBugs (FB Contrib plugin) checks:</p>
+<ul>
+<li>LO_APPENDED_STRING_IN_FORMAT_STRING Method passes a concatenated string to SLF4J's format string</li>
+</ul>
+<h1 id="3-placeholder-arguments">3. Placeholder arguments</h1>
+<p>Wrong way:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">W3a</span><span class="p">.</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Obj={}&quot;</span><span class="p">,</span><span class="n">myObj</span><span class="p">.</span><span class="na">getSomeBigField</span><span class="p">());</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">W3b</span><span class="p">.</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Obj={}&quot;</span><span class="p">,</span><span class="n">myObj</span><span class="p">.</span><span class="na">toString</span><span class="p">());</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">W3c</span><span class="p">.</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Obj={}&quot;</span><span class="p">,</span><span class="n">myObj</span><span class="p">,</span><span class="w"> </span><span class="n">anotherObj</span><span class="p">);</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">W3d</span><span class="p">.</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Obj={} another={}&quot;</span><span class="p">,</span><span class="n">myObj</span><span class="p">);</span>
+</code></pre></div>
+<p>Correct way:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">C3a</span><span class="p">.</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Obj={}&quot;</span><span class="p">,</span><span class="n">myObj</span><span class="p">);</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">C3b</span><span class="p">.</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Obj={}&quot;</span><span class="p">,</span><span class="n">myObj</span><span class="p">.</span><span class="na">log</span><span class="p">());</span>
+</code></pre></div>
+<p><em>General rule</em>: the placeholder should be an object (C3a), not a method return value (W3a) to post-pone its evaluation after logging level analysis (see the previous paragraph). In the W3a example, the method getSomeBigField() will be always called, regardless of the logging level. For the same reason, we should avoid W3b which is semantically equivalent to C3a but it always incurs in the toString() method invocation.</p>
+<p>Solutions W3c and W3d are wrong because the number of placeholders in the format string does not match the number of placeholders' arguments.</p>
+<p>Solution C3b could be somehow misleading because it includes a method invocation but it could be useful whenever the myObj contains several fields (for example it is a big JPA entity) but we do not want to log all its contents.</p>
+<p>For example, let's consider the following class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Person</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">fullName</span><span class="p">;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Date</span><span class="w"> </span><span class="n">birthDate</span><span class="p">;</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">address</span><span class="p">;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">attributes</span><span class="p">;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">phoneNumbers</span><span class="p">;</span>
+</code></pre></div>
+<p>its toString() method will most probably include all fields. Using solution C3a, all their values will be printed in the log file.</p>
+<p>If you do not need all this data, it is useful to define a <strong>helper</strong> method like the following:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">log</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">String</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="s">&quot;Person: id=%s name=%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">id</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="p">);</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">}</span>
+</code></pre></div>
+<p>which prints relevant information only. This solution is also CPU and memory lighter than toString().</p>
+<p>What is relevant? It depends on the application and on the object type. For a JPA entity, I usually include in the log() method the ID field (in order to let me find the record in the DB if I need all columns data) and, maybe, one or two important fields.</p>
+<p>For no reason, password fields and/or sensitive info (phone numbers,...) should be logged. This is an additional reason to not log in using toString().</p>
+<p>Related FindBugs (SLF4J plugin) checks:</p>
+<ul>
+<li>SLF4J_PLACE_HOLDER_MISMATCH</li>
+</ul>
+<h1 id="4-debug-messages">4. Debug messages</h1>
+<p>IMPORTANT: rule #4 (see <a href="https://gualtierotesta.wordpress.com/2015/11/29/the-5-java-logging-rules/">5 rules article</a>) guide us to use a guarded debug logging</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">LOGGER</span><span class="p">.</span><span class="na">isDebugEnabled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">debug</span><span class="p">(</span><span class="err">“</span><span class="n">Obj</span><span class="o">=</span><span class="p">{}</span><span class="err">”</span><span class="p">,</span><span class="w"> </span><span class="n">myObj</span><span class="p">);</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">}</span>
+</code></pre></div>
+<p>Using SLF4J, if the placeholder argument is an object reference (see solutions C3a/C3b), we can avoid the if to keep the code cleaner.</p>
+<p>So it is safe to use the following:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">LOGGER</span><span class="p">.</span><span class="na">debug</span><span class="p">(</span><span class="err">“</span><span class="n">Obj</span><span class="o">=</span><span class="p">{}</span><span class="err">”</span><span class="p">,</span><span class="w"> </span><span class="n">myObj</span><span class="p">);</span>
+</code></pre></div>
+<h1 id="5-exceptions">5. Exceptions</h1>
+<p>Proper exceptions logging is an important support for problem analysis but it is easy to neglect its usefulness.</p>
+<p>Wrong way:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">W5a</span><span class="p">.</span><span class="w"> </span><span class="nf">catch</span><span class="w"> </span><span class="p">(</span><span class="n">SomeException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="n">ex</span><span class="p">);</span><span class="w"> </span><span class="p">}..</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">W5b</span><span class="p">.</span><span class="w"> </span><span class="nf">catch</span><span class="w"> </span><span class="p">(</span><span class="n">SomeException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">&quot;Error:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span><span class="w"> </span><span class="p">}..</span>
+</code></pre></div>
+<p>Correct way:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">C5</span><span class="p">.</span><span class="w"> </span><span class="nf">catch</span><span class="w"> </span><span class="p">(</span><span class="n">SomeException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">&quot;Read operation failed: id={}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">idRecord</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span><span class="w"> </span><span class="p">}..</span><span class="err">`</span>
+</code></pre></div>
+<p><em>General rules</em>:</p>
+<ol>
+<li>
+<p>Do not remove the stack trace information by using getMessage() (see W5b) and not the complete exception. The stack trace often includes the real cause of the problem which is easily another exception raised by the underlying code. Logging only the message will prevent us to discover the real cause of the problem.</p>
+</li>
+<li>
+<p>Do show significant (for the human who will analyze the log file) information in the logging message showing a text explaining what we wanted to perform while the exception was raised (not the exception kind or messages like "error": we know already something bad happened). What we need to know is what we were doing and on which data.</p>
+</li>
+</ol>
+<p>The C5 example tells us we were trying to read the record with a specific ID whose value has been written in the log with the message.</p>
+<p>Please note that C5 uses one placeholder in the format string but there are two additional arguments. This is not an error but a special pattern that is recognized by SLF4J as an exception logging case: the last argument (ex in the C5 example) is considered by SLF4J as a Throwable (exception) so it should be not included in the format string.</p>
+<p>Related FindBugs (SLF4J plugin) checks:</p>
+<ul>
+<li>SLF4J_MANUALLY_PROVIDED_MESSAGE: the message should not be based on Exception getMessage()</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["search.highlight", "search.suggest", "content.tabs.link", "content.code.annotate", "navigation.instant"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  </body>
+</html>

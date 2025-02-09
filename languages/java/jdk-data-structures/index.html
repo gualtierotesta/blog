@@ -1,0 +1,795 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Gualtiero Testa">
+      
+      
+        <link rel="canonical" href="https://gualtierotesta.github.io/blog/languages/java/jdk-data-structures/">
+      
+      
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.3">
+    
+    
+      
+        <title>DATA STRUCTURES IN THE JDK - Sharing developer experiences</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d7758b05.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-Z08MZGHK67"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-Z08MZGHK67",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-Z08MZGHK67",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#data-structures-in-the-jdk" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Sharing developer experiences" class="md-header__button md-logo" aria-label="Sharing developer experiences" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sharing developer experiences
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DATA STRUCTURES IN THE JDK
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Sharing developer experiences" class="md-nav__button md-logo" aria-label="Sharing developer experiences" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    Sharing developer experiences
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    About me
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../articles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Articles
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../books/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Books reviews
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../certifications/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Certifications
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Languages
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../methodologies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Methodologies
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../security/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Security
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../my-books/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    My books
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#list" class="md-nav__link">
+    <span class="md-ellipsis">
+      LIST
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set" class="md-nav__link">
+    <span class="md-ellipsis">
+      SET
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#map" class="md-nav__link">
+    <span class="md-ellipsis">
+      MAP
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iterators" class="md-nav__link">
+    <span class="md-ellipsis">
+      ITERATORS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#queue-e-dequeue" class="md-nav__link">
+    <span class="md-ellipsis">
+      QUEUE e DEQUEUE
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+        <span class="md-tag">data structures</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">iterator</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">java</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">jdk</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">list</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">map</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">queue</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">set</span>
+      
+    
+  </nav>
+
+
+
+<h1 id="data-structures-in-the-jdk">DATA STRUCTURES IN THE JDK</h1>
+<p><em>Last update: 9 Nov 2022</em></p>
+<h3 id="list">LIST</h3>
+<p>Iteration/enumeration</p>
+<div class="highlight"><pre><span></span><code>The enumeration is the old way (Java 1) to iterate a collection of items. It has been replaced by the iterator.
+</code></pre></div>
+<p>ArrayList</p>
+<div class="highlight"><pre><span></span><code>The standard list. It is based on an array.
+</code></pre></div>
+<p>CopyOnWriteArrayList</p>
+<div class="highlight"><pre><span></span><code>Useful when removing elements during iteration.
+It should not be used when the list is very big because it creates several copies of the underlying array. 
+One of the copies is kept to be used for the iterator.
+Useful when there are many readers and few writers like in observers/listener lists.
+observers/listeners
+</code></pre></div>
+<p>LinkedList (Do not use)</p>
+<div class="highlight"><pre><span></span><code>It is based on nodes, not arrays.
+Do not use, very inefficient.
+</code></pre></div>
+<p>Vector (Do not use)</p>
+<div class="highlight"><pre><span></span><code>Synchronised array.
+Alternative: Collections.synchronizedList( new ArrayList&lt;&gt;(...))
+</code></pre></div>
+<p>Stack  (Do not use)</p>
+<div class="highlight"><pre><span></span><code>Extend Vector.
+Alternative: ConcurrentLinkedDequeue
+</code></pre></div>
+<h3 id="set">SET</h3>
+<p>TreeSet</p>
+<div class="highlight"><pre><span></span><code>The items in the collection should be Comparable: the identity of the items is based on the method compareTo, not on the methods equals or hashCode.
+The items are ordered.
+The binary tree is a Red-Black type so tree branches are balanced in length.
+Not thread-safe.
+</code></pre></div>
+<p>ConcurrentSkipListSet</p>
+<div class="highlight"><pre><span></span><code>A thread-safe variant of TreeSet that uses a SkipList list that uses multiple pointers to get directly to the middle and other intermediate points of the list, to have a log(n) read access therefore faster than the LinkedList.
+
+The performances are similar to the TreeSet but concurrently.
+It is not frequently used, even in the JDK itself.
+</code></pre></div>
+<p>CopyOnWriteArraySet</p>
+<div class="highlight"><pre><span></span><code>It is a thread-safe structure similar to CopyOnWriteArrayList.
+Items are not ordered. The method equals is used for univocity.
+Suggested for small collections because all operations have quadratic (n*n) cost.
+</code></pre></div>
+<p>HashSet</p>
+<div class="highlight"><pre><span></span><code>A not thread-safe set which uses the method hashCode for univocity.
+Items are not ordered.
+</code></pre></div>
+<p>ConcurrentHashMap.getKeySet</p>
+<div class="highlight"><pre><span></span><code>A way to get a thread-safe set similar to TreeSet.
+</code></pre></div>
+<p>LinkedHashSet</p>
+<div class="highlight"><pre><span></span><code>A not thread-safe set based on LinkedHashMap (see later)
+</code></pre></div>
+<p>EnumSet
+    Non thread-safe. It is a set where items are enums.
+    It is optimised for set operations.</p>
+<h3 id="map">MAP</h3>
+<p>HashMap</p>
+<div class="highlight"><pre><span></span><code>Not thread-safe. 
+The key hashCode is used to determine the bucket in the map where to store the key-value couple.
+Inside the bucket, the couple is saved in a linked list.
+From Java 8, if the bucket contains more than 11 couples, the linked list is replaced by a tree set for performance reasons. it is so better to use a key which implements the Comparable interface.
+</code></pre></div>
+<p>ConcurrentHashMap</p>
+<div class="highlight"><pre><span></span><code>The thread-safe variant of the HashMap.
+From Jaba 8, its overhead is low and there are no more strong reasons to prefer the HashMap.
+Be aware that two concurrency bugs in the computeIfAbsent method have been fixed in Java 9.
+</code></pre></div>
+<p>TreeMap</p>
+<div class="highlight"><pre><span></span><code>Not thread-safe. The keys are ordered and they should implement the Comparable interface.
+</code></pre></div>
+<p>ConcurrentSkipListMap</p>
+<div class="highlight"><pre><span></span><code>It is the concurrent version of the TreeMap.
+Not so used.
+</code></pre></div>
+<p>Hashtable</p>
+<div class="highlight"><pre><span></span><code>It is a Java 1 concurrent map with very slow reads.
+Better to use the ConcorrentHashMap
+</code></pre></div>
+<p>LinkedHashMap</p>
+<div class="highlight"><pre><span></span><code>Not thread-safe. It is similar to the HashMap but with links that record the insertion order.
+The order can be changed to a least recently used (LRU) order.
+</code></pre></div>
+<p>EnumMap</p>
+<div class="highlight"><pre><span></span><code>Not thread-safe. It is a specialised map where the keys are enums.
+Not so used but it is convenient as a list index instead of the Enum.ordinal() method.
+</code></pre></div>
+<p>IndentityHashMap</p>
+<div class="highlight"><pre><span></span><code>Not thread-safe. The key&#39;s presence is checked with the identity (==) instead of the equality ( equals() ).
+Not so used.
+</code></pre></div>
+<p>Properties</p>
+<div class="highlight"><pre><span></span><code>It exists since Java 1. Originally it used a HashTable but now it is based on a ConcurrentHashMap.
+</code></pre></div>
+<p>WeakHashMap</p>
+<div class="highlight"><pre><span></span><code>Similar to the HashMap where the keys are WeakReferences. The idea is the map can be emptied by the garbage collector.
+Operation time is unpredictable because the purge is implemented in the calls. Moreover, the WeakReferences are not handled very well by the garbage collector.
+</code></pre></div>
+<h3 id="iterators">ITERATORS</h3>
+<p>fail-fast</p>
+<div class="highlight"><pre><span></span><code>The iterator checks if the underlying collection has been modified. If so, it throws a ConcurrentModificationException.
+The not thread-safe collections usually have a fail-fast iterator.
+It is not guaranteed (best-effort) that the iterator detects the change in the collection.
+</code></pre></div>
+<p>weakly consistent (or fail-safe)</p>
+<div class="highlight"><pre><span></span><code>The thread-safe collections use fail-safe iterators. These iterators can handle the changes in the underlying collection; they never throw a ConcurrentModificationException.
+They cannot guarantee (weakly consistency) that they report the latest state of the collection.
+The number of the collection&#39;s items iterated is the one when the iterator has been created.
+</code></pre></div>
+<p>snapshot</p>
+<div class="highlight"><pre><span></span><code>The snapshot iterator uses a read-only snapshot of the content of the collection. It is used in the COW collections (CopyOnWriteArrayList and CopyOnWriteArraySet).
+</code></pre></div>
+<p>undefined</p>
+<div class="highlight"><pre><span></span><code>Iterator added to the old Vector and HashTable collections.
+Their behaviour is undefined when there are concurrent writes.
+</code></pre></div>
+<h3 id="queue-e-dequeue">QUEUE e DEQUEUE</h3>
+<p>QUEUE   = FIFO, pronounced "kiu"
+DEQUEUE = FIFO e LIFO, pronounced "deck", (Double Ended Queue)</p>
+<div class="highlight"><pre><span></span><code>Queue operations have different names and implementing methods:
+
+    - INSERT: add or offer
+    - REMOVE: remove or poll
+    - CHECK: element or peek
+    - STACK (dequeue only): push (=addFirst) and pop (=removeFirst)
+
+The order is usually FIFO but the priority queues use a comparator and the dequeues can also use a LIFO order.
+
+All queues and dequeues do not allow null values.
+</code></pre></div>
+<p>ConcurrentLinkedQueue, ConcurrentLinkedDequeue</p>
+<div class="highlight"><pre><span></span><code>They&#39;re both multi-producer and multi-consumer. The queue length is unbounded (=without limits).
+The size() method has a high cost because all items should be iterated. Moreover, there is no meaning to count the items in a queue.
+The iterator is weakly consistent.
+The ConcurrentLinkedDequeue can be used as a thread-safe stack.
+The ConcurrentLinkedQueue can be used as a thread-safe LinkedList but the method get(index) should not be used.
+</code></pre></div>
+<p>ArrayDeque</p>
+<div class="highlight"><pre><span></span><code>It is not thread-safe; the underlying structure is an array.
+Fast, most of the operation costs have constant time ( O(1)).
+Nulls not accepted. Fail-fast operator.
+</code></pre></div>
+<p>Blocking queues and dequeues</p>
+<div class="highlight"><pre><span></span><code>They block the write operations if the queue is full and the read operations if the queue is empty.
+They are thread-safe with timeouts that can prevent forever blocking.
+Nulls not accepted.
+</code></pre></div>
+<p>LinkedBlockingQueue e LinkedBlockingDeque </p>
+<div class="highlight"><pre><span></span><code>They are optimised for the single-producer single-consumer use case. In other cases, they can be slower than the other queues.
+It is possible to define a limit in the queue length.
+</code></pre></div>
+<p>ArrayBlockingQueue</p>
+<div class="highlight"><pre><span></span><code>Bounded queue based on a fixed length array. Bounded
+Memory efficient, it uses a single lock so there is contention when there are more producers and/or consumers.
+</code></pre></div>
+<p>DelayQueue</p>
+<div class="highlight"><pre><span></span><code>Not so used in the JDK.
+The elements in the queue are visible to the consumer only after a delay.
+</code></pre></div>
+<p>SynchronousQueue</p>
+<div class="highlight"><pre><span></span><code>A synchronous queue with max one element. It is used to implement the cachedThreadPool.
+
+A blocking queue in which each inserts operation must wait for a corresponding remove operation by another thread, and vice versa.
+
+A synchronous queue does not have any internal capacity, not even a capacity of one. You cannot peek at a synchronous queue because an element is only present when you try to remove it; you cannot insert an element (using any method) unless another thread is trying to remove it; you cannot iterate as there is nothing to iterate.
+
+The head of the queue is the element that the first queued inserting thread is trying to add to the queue; if there is no such queued thread then no element is available for removal and poll() will return null.
+
+For purposes of other Collection methods (for example, contains), a SynchronousQueue acts as an empty collection. This queue does not permit null elements.
+</code></pre></div>
+<p>LinkedTransferQueue </p>
+<div class="highlight"><pre><span></span><code>Introduced in a JAVA 7 beta version to be used in the ForkJoinPool but then no more used.
+</code></pre></div>
+<p>PriorityQueue and PriorityBlockingQueue</p>
+<div class="highlight"><pre><span></span><code>These are unbounded queues that sort the elements in the queue.
+The PriorityQueue is not thread-safe while the PriorityBlockingQueue is.
+The priority is based on the natural order (if items implement Comparable) or via a comparator.
+</code></pre></div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["search.highlight", "search.suggest", "content.tabs.link", "content.code.annotate", "navigation.instant"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  </body>
+</html>
