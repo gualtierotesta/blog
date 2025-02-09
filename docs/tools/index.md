@@ -8,7 +8,11 @@
 
 * [Bruno](ide/bruno.md)
 * [VSCode](ide/vscode.md)
-  
+
+## Setup
+
+* [SDKMan](setup/sdkman.md)
+
 ## Version control systems
 
 * [GIT](git.md)
