@@ -18,7 +18,6 @@ Note: the picture has been taken in Rapallo (GE), Italy.
 You can found me here:
 
 * Personal site: [https://gualtierotesta.github.io/blog](https://gualtierotesta.github.io/blog)
-* Blog on Medium @gualtierotesta: [https://medium.com/@gualtierotesta](https://medium.com/@gualtierotesta)
 * LinkedIn: [https://www.linkedin.com/in/gualtierotesta](https://www.linkedin.com/in/gualtierotesta)
 * GitHub: [https://github.com/gualtierotesta](https://github.com/gualtierotesta)
 * Mastodon @gualtierotesta: [https://mastodon.uno/@gualtierotesta](https://mastodon.uno/@gualtierotesta)

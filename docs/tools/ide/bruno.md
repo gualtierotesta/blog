@@ -4,9 +4,9 @@ tags: [tools, ide, client, bruno, api, postman]
 
 # Bruno
 
-*Last update: 8 Sep 2024*
+*Last update: 19 Apr 2025*
 
-Article on [Medium](https://medium.com/@gualtierotesta/bruno-an-ide-for-apis-8f0257394e41)
+Article [here](../../articles/bruno.md)
 
 Links:
 
