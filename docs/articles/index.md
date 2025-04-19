@@ -1,6 +1,7 @@
 # Articles
 
 * [Bruno](bruno.md)
+* [Git Crypt](git-crypt.md)
 
 ### Java
 
@@ -10,7 +11,7 @@
 
 ### Maven
 
-* [Maven Enforcer](maven-enforcer.md)
+* [Maven Enforcer plugin](maven-enforcer.md)
 
 ### Testing
 
