@@ -1,5 +1,7 @@
 # Articles
 
+* [Bruno](bruno.md)
+
 ### Java
 
 * [The 5 Java logging rules](java/logging-rules.md)
@@ -10,12 +12,10 @@
 
 * [Maven Enforcer](maven-enforcer.md)
 
-
 ### Testing
 
 * [Testing Java classes' immutability](testing/java-classes-immutability.md)
 * [POJO and JavaBean testing using the bean-matchers library](testing/bean-matchers.md)
-
 
 ### Vaadin
 
