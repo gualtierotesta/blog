@@ -1,5 +1,6 @@
 # Book reviews
 
+* [Designing Cloud Data Platforms](designing-cloud-data-platform.md)
 * [Data-Oriented Programming - Reduce software complexity](data-oriented-programming.md)
 * [DevOps with Kubernetes (1st ed.)](devops-with-kubernetes.md)
 * [Get your hands dirty on clean architecture](get-your-hands-dirty-on-clean-architecture.md)
