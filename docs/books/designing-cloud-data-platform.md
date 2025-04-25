@@ -1,12 +1,12 @@
 ---
-tags: [book review, cloud, data platforms, aws, azuer, google cloud]
+tags: [book review, cloud, data platforms, aws, azure, google cloud]
 ---
 
 # Designing Cloud Data Platforms
 
 *Last update: 25 Apr 2025*
 
-<img align="left" src="../covers/designing-cloud-data-platform.jpeg" alt="cover" height="200" />
+<img align="left" src="../covers/designing-cloud-data-platform.jpeg" alt="cover" height="200" width="150" />
 
 **Designing Cloud Data Platforms**
 
@@ -20,7 +20,7 @@ Year: 2021
 
 <br/>
 
-"Designing Cloud Data Platforms" by Manning offers a useful overview for data engineers, software architects and experienced developers working with cloud data solutions.
+**Designing Cloud Data Platforms** by Manning offers a useful overview for data engineers, software architects and experienced developers working with cloud data solutions.
 
 The book effectively describes various architectural approaches, providing a balance of theoretical explanation and practical considerations. The inclusion of pros and cons for each architecture is a helpful element.
 
