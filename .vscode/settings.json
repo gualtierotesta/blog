@@ -5,5 +5,7 @@
     "grammarly.files.include": ["**/*.md", "**/*.txt"],
     "grammarly.config.documentDialect": "british",
     "grammarly.config.suggestions.MissingSpaces": true,
-    "grammarly.config.suggestions.PossiblyBiasedLanguageGenderRelated": true  
+    "grammarly.config.suggestions.PossiblyBiasedLanguageGenderRelated": true,
+    "IDX.aI.enableInlineCompletion": true,
+    "IDX.aI.enableCodebaseIndexing": true
 }
