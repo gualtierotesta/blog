@@ -1,0 +1,899 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Gualtiero Testa">
+      
+      
+        <link rel="canonical" href="https://gualtierotesta.github.io/blog/articles/maven-enforcer/">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Maven enforcer - Sharing developer experiences</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-Z08MZGHK67"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-Z08MZGHK67",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-Z08MZGHK67",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sharing developer experiences" class="md-header__button md-logo" aria-label="Sharing developer experiences" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sharing developer experiences
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Maven enforcer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sharing developer experiences" class="md-nav__button md-logo" aria-label="Sharing developer experiences" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    Sharing developer experiences
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    About me
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Articles
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../books/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Books reviews
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../certifications/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Certifications
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../languages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Languages
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodologies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Methodologies
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Security
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../my-books/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    My books
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rules-to-check-the-project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rules to check the project structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rules-to-check-the-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rules to check the dependencies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-plugin-from-command-line-and-in-a-ci-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using the plugin from command line and in a CI pipeline
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusions
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+        <span class="md-tag">coding</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">java</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">maven</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">maven-enforcer-plugin</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">plugins</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">pom.xml</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">super pom</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">versions</span>
+      
+    
+  </nav>
+
+
+
+  <h1>Maven enforcer</h1>
+
+<p><em>Last update: 02 Jun 2025</em></p>
+<h2 id="introduction">Introduction</h2>
+<p>You can find an example of a project with this plugin <a href="https://github.com/gualtierotesta/PlayWithJava">here</a>.</p>
+<p>The <a href="https://maven.apache.org/enforcer/maven-enforcer-plugin">Maven Enforcer Plugin</a> is a valuable tool to be used in all Maven projects because, without this plugin, Maven is more permissive on how the project is defined, leading to possible issues or incoherence during the building process.</p>
+<p>The Enforcer plugin:</p>
+<ul>
+<li>Checks that the project structure and definition, the <code>pom.xml</code> file(s), is correct.</li>
+<li>Guarantees that the project direct and transitive dependencies are not fighting to each other</li>
+<li>assures that the project builds are consistent and repeatable regardless who and what run them</li>
+</ul>
+<p>The Enforcer plugin runs at each build and fails it whenever finds an error in the project.</p>
+<p>The first step is to add the plugin in the project parent <code>pom.xml</code> file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">&lt;build&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">   </span><span class="nt">&lt;plugins&gt;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">     </span>...<span class="w"> </span>other<span class="w"> </span>plugins<span class="w"> </span>...
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">     </span><span class="nt">&lt;plugin&gt;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">       </span><span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">       </span><span class="nt">&lt;artifactId&gt;</span>maven-enforcer-plugin<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">       </span><span class="nt">&lt;version&gt;</span>xxx<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">       </span><span class="nt">&lt;executions&gt;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">         </span><span class="nt">&lt;execution&gt;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">           </span><span class="nt">&lt;id&gt;</span>enforce-maven<span class="nt">&lt;/id&gt;</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">           </span><span class="nt">&lt;goals&gt;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">             </span><span class="nt">&lt;goal&gt;</span>enforce<span class="nt">&lt;/goal&gt;</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">           </span><span class="nt">&lt;/goals&gt;</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">           </span><span class="nt">&lt;configuration&gt;</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">             </span><span class="nt">&lt;rules&gt;</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">               </span>...<span class="w"> </span>rules<span class="w"> </span>...
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">             </span><span class="nt">&lt;/rules&gt;</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">           </span><span class="nt">&lt;/configuration&gt;</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">         </span><span class="nt">&lt;/execution&gt;</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">       </span><span class="nt">&lt;/executions&gt;</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">     </span><span class="nt">&lt;/plugin&gt;</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">   </span><span class="nt">&lt;/plugins&gt;</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="nt">&lt;/build&gt;</span>
+</code></pre></div>
+<p>In the <code>rules</code> section, we add the rules we want to be checked by the Enforcer. The set of the built-in rules is documented <a href="https://maven.apache.org/enforcer/enforcer-rules/index.html">here</a>.</p>
+<blockquote>
+<p>We can define custom rules or use custom rules not created by the Enforcer plugin team. <a href="https://maven.apache.org/enforcer/enforcer-api/writing-a-custom-rule.html">Here is</a> the link on how to create a custom rule.</p>
+</blockquote>
+<p>If at least one of the rules fails, the Maven build fails with a message like the following:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[ERROR] Rule 3: org.apache.maven.enforcer.rules.version.RequireMavenVersion failed with message:
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>[ERROR] Detected Maven Version: 3.6.3 is not in the allowed range [3.9,3.9].
+</code></pre></div>
+<p>The rules can be logically grouped based on their purpose. Let’s take a look at the most important ones, group by group.</p>
+<h2 id="rules-to-check-the-project-structure">Rules to check the project structure</h2>
+<p>The purpose of the rules in this group is to check that the project is well-defined and complete. The following built-in rules belong to this group:</p>
+<ul>
+<li>reactorModuleConvergence</li>
+<li>banDuplicatePomDependencyVersions</li>
+<li>requiresFiles*</li>
+</ul>
+<p>The Reactor is the Maven engine that manages the build of a multi-module project and, among other tasks, define the order in which each module should be built.</p>
+<p>In a multi-module Maven project, the internal hierarchy can be complex, with internal dependencies between the modules: module A uses modules B and C and modules B uses module C so module C should be built before A and B and module B before A.</p>
+<p>The <a href="https://maven.apache.org/enforcer/enforcer-rules/reactorModuleConvergence.html">reactorModuleConvergence</a> rule checks that the project internal is consistent and converge to a unique and consistent build process. Moreover, the rule checks that all modules have a proper parent and with the right version.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">&lt;reactorModuleConvergence&gt;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&lt;message&gt;</span>The<span class="w"> </span>reactor<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>valid<span class="nt">&lt;/message&gt;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">&lt;/reactorModuleConvergence&gt;</span>
+</code></pre></div>
+<p>Every multi-module project should use this rule.</p>
+<p>On the contrary, the <a href="https://maven.apache.org/enforcer/enforcer-rules/banDuplicatePomDependencyVersions.html">banDuplicatePomDependencyVersions</a> rule has a very simple job: check if there are duplicated dependencies. This check is also performed by several IDEs when editing the <code>pom.xml</code> file, but it is convenient to add it to the Enforcer checks.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">&lt;banDuplicatePomDependencyVersions/&gt;</span>
+</code></pre></div>
+<p>There are a set of rules which can check the presence, the absence or the size of files in the project. For example, the <a href="https://maven.apache.org/enforcer/enforcer-rules/requireFilesExist.html">requireFilesExist</a> rule can be used to check if the specified files exist:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">&lt;requireFilesExist&gt;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&lt;files&gt;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">&lt;file&gt;</span>README.md<span class="nt">&lt;/file&gt;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&lt;/files&gt;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nt">&lt;/requireFilesExist&gt;</span>
+</code></pre></div>
+<p>In this example, the Maven build will fail if the project does not have a not-empty README.md file.</p>
+<p>Similar rules are <a href="https://maven.apache.org/enforcer/enforcer-rules/requireFilesDontExist.html">requireFilesDontExist</a> and <a href="https://maven.apache.org/enforcer/enforcer-rules/requireFilesSize.html">requireFileSize</a>.</p>
+<p><strong>IMPORTANT</strong>: In a multi-module project, the rules are applied to each module so, in the previous example, the file README will be searched on each module directory. If you want to check the presence of the file at the root of the project only, you have to specify an absolute path:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">&lt;requireFilesExist&gt;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&lt;files&gt;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">&lt;file&gt;</span>${user.dir}/README.md<span class="nt">&lt;/file&gt;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&lt;/files&gt;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nt">&lt;/requireFilesExist&gt;</span>
+</code></pre></div>
+<blockquote>
+<p>${user.dir} is the variable that defines the directory from which Maven was started. This variable represents the current working directory of the process running Maven.</p>
+</blockquote>
+<p>My personal suggestion on how to use the rules in this group is the following:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">&lt;rules&gt;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>...<span class="w"> </span>other<span class="w"> </span>rules<span class="w"> </span>...
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&lt;reactorModuleConvergence&gt;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">&lt;message&gt;</span>The<span class="w"> </span>reactor<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>valid<span class="nt">&lt;/message&gt;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">&lt;/reactorModuleConvergence&gt;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span><span class="nt">&lt;banDuplicatePomDependencyVersions/&gt;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span><span class="nt">&lt;requireFilesExist&gt;</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="nt">&lt;files&gt;</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="nt">&lt;file&gt;</span>${user.dir}/README.md<span class="nt">&lt;/file&gt;</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">        </span><span class="nt">&lt;file&gt;</span>${user.dir}/.editorconfig<span class="nt">&lt;/file&gt;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">    </span><span class="nt">&lt;/files&gt;</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">  </span><span class="nt">&lt;/requireFilesExist&gt;</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="nt">&lt;/rules&gt;</span>
+</code></pre></div>
+<p>Here, we enforce:</p>
+<ul>
+<li>Maven Reactor should be able to converge,</li>
+<li>no duplicated dependencies are allowed,</li>
+<li>A not-empty <code>README.md</code> file should exist at the project root directory</li>
+<li>A not-empty <code>.editorconfig</code> file should exist at the project root directory</li>
+</ul>
+<h2 id="rules-to-check-the-dependencies">Rules to check the dependencies</h2>
+<p>The purpose of the rules in this group is to guarantee that the project has a valid set of dependencies. The following rules belong to this group:</p>
+<ul>
+<li>dependencyConvergence and requireUpperBoundDependecies</li>
+<li>requireReleaseDeps</li>
+<li>requireSameVersions</li>
+<li>requireExplicitDependencyScope</li>
+</ul>
+<p>In Maven, the project dependencies can be direct, when we specify them in the pom.xml file, or transitive, dependencies that are direct dependencies of our dependencies. Please, be aware that this is a simplistic description of the complex dependencies resolution mechanism implemented in Maven. The reference document is here.</p>
+<p>For example, if we have the following (direct) dependency in the project’s POM:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>ch.qos.logback<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>logback-classic<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nt">&lt;version&gt;</span>xxx<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<p>Maven will dynamically add, as project dependency, also the following (transitive) one:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.slf4j<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>slf4j-api<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nt">&lt;version&gt;</span>xxx<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<p>Because the <code>logback-classic</code> library requires the <code>slf4j-api</code> library.</p>
+<p>The rule <a href="https://maven.apache.org/enforcer/enforcer-rules/dependencyConvergence.html">dependencyConvergence</a> checks that all project dependencies, direct and transitives, result to a set of dependencies with a unique version. The rule will fail if a dependency is required in different versions by different dependencies; all dependencies should require the same version.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">&lt;dependencyConvergence</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>This rule can easily fail, especially on popular libraries like SLF4J or Guava because many other libraries use them in different versions. It is sometime necessary to exclude some libraries because convergence is not difficult or impossible to achieve:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">&lt;dependencyConvergence&gt;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&lt;excludes&gt;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">&lt;exclude&gt;</span>org.slf4j:slf4j-api<span class="nt">&lt;/exclude&gt;</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">&lt;/excludes&gt;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nt">&lt;/dependencyConvergence&gt;</span>
+</code></pre></div>
+<p>The rule <a href="https://maven.apache.org/enforcer/enforcer-rules/requireUpperBoundDeps.html">requireUpperBoundDependecies</a> is somehow less strict than the dependencyCovergence rule as it checks if all transitive dependencies are below or the same of the latest (upper) version required and not all to the same version.</p>
+<p>The upped bound version of a dependency is defined in the dependencyManagement section of the project’s POM:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">&lt;dependencyManagement&gt;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">&lt;dependencies&gt;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">      </span><span class="nt">&lt;groupId&gt;</span>org.slf4j<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">      </span><span class="nt">&lt;artifactId&gt;</span>slf4j-api<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">      </span><span class="nt">&lt;version&gt;</span>2.0.16<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">  </span><span class="nt">&lt;/dependencies&gt;</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="nt">&lt;/dependencyManagement&gt;</span>
+</code></pre></div>
+<p>In this example, 2.0.16 is the upper bound version of the slf4j-api library. The requireUpperBoundDependencies rule fails if a direct or transitive dependency to this library refer to a version above 2.0.16.</p>
+<p>It does make sense to use both the rules because the dependencyConverge rule says “let’s use the same version of the slf4j-api library in all project modules” while the requireUpperBoundDependecies rule says “and this version should be 2.0.16 or below”.</p>
+<p>The <a href="https://maven.apache.org/enforcer/enforcer-rules/requireSameVersions.html">requireSameVersions</a> rule is very similar to the dependencyConverge rule but with a different focus: check that “specific dependencies and/or plugins have the same version”. I don’t think it is necessary to use this rule together with dependencyConverge.</p>
+<p>The <a href="https://maven.apache.org/enforcer/enforcer-rules/requireReleaseDeps.html">requireReleaseDeps</a> rule checks the dependencies and fails if any snapshots are found. The snapshot versions are, by the definition, under development and so unstable. In order to have a repeatable and well define build process, we cannot use snapshots versions of third party libraries.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">&lt;requireReleaseDeps</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>Another important rule is <a href="https://maven.apache.org/enforcer/enforcer-rules/banDynamicVersions.html">banDynamicVersions</a> that checks if the version of any dependency version is determined at build time; all <code>SNAPSHOT</code>, <code>RELEASE</code> and <code>LATEST</code> versions are dynamically evaluated. At each build, Maven will check the repository to determine which is the exact version to be used. The effect is the build is no more repeatable; the results depend on the moment in time the build was run.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">&lt;banDynamicVersions</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>My personal suggestion on how to use the rules in this group is the following:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">&lt;rules&gt;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span>...<span class="w"> </span>other<span class="w"> </span>rules<span class="w"> </span>...
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="nt">&lt;dependencyConvergence</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="nt">&lt;requireUpperBoundDeps</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span><span class="nt">&lt;requireReleaseDeps</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">  </span><span class="nt">&lt;banDynamicVersions</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="nt">&lt;/rules&gt;</span>
+</code></pre></div>
+<p>Rules to guarantee builds consistency and repeatability</p>
+<p>The purpose of the rules in this group is to enforce Maven build consistency and repeatability. The following rules belong to this group:</p>
+<ul>
+<li>requireJavaVersion</li>
+<li>requireJavaVendor</li>
+<li>requireOS</li>
+<li>requireMavenVersion</li>
+<li>requirePluginVersions</li>
+</ul>
+<p>The outcome of a Maven project build, for example the .jar file created in the target dir, depends on several factors:</p>
+<ol>
+<li>The operating system (Linux, MacOs, Windows)</li>
+<li>The Java Development Kit (OpenJDK, Temurin…)</li>
+<li>The Java language version (8, 11, 21…) of the used JDK</li>
+<li>The Maven tool</li>
+<li>The Maven plugin.</li>
+<li>The project source code</li>
+</ol>
+<p>We usually assume that, if the code does not change (factor #6), the artifact is always and exactly the same regardless who in the team runs the build or how the pipeline has been set up.</p>
+<p><strong>This is a wrong assumption.</strong></p>
+<p>For example, changing the Maven version, several plugins change their default version (unless specified in the pom.xml) so, when we run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>mvn<span class="w"> </span>clean<span class="w"> </span>verify
+</code></pre></div>
+<p>Several Maven plugins are invoked (clean, compiler, surefire, jar, failsafe), each with its own version. Different plugin versions can bring different results.</p>
+<p>To avoid this uncertainty in the build outcome, we can use Enforcer to control all the factors that can influence how the Maven build is executed.</p>
+<p>The rule <a href="https://maven.apache.org/enforcer/enforcer-rules/requireJavaVersion.html">requireJavaVersion</a> enforces the Java version used to build the project:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nt">&lt;requireJavaVersion&gt;</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="nt">&lt;version&gt;</span>[17]<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="nt">&lt;/requireJavaVersion&gt;</span>
+</code></pre></div>
+<p>In the above example, the project build requires a Java 17 compiler and will fail using, for example, a Java 21 compiler. Please note, Java version here refers to the language level supported by the JDK’s compiler, not the language level we use in our source code, which is defined by the <code>maven.compiler.release</code> property in the <code>pom.xml</code> file.</p>
+<p>In this plugin, like in all others, numeric values can be also specified as range: see here for examples. This allows us to define a range of accepted values. In the example, only version 17 is accepted, but we could write <code>&lt;version&gt;17&lt;/version&gt;</code> which means 17 or above.</p>
+<p>With the same logic, but using strings and not numeric values, we can limit the vendor of the JDK used to build the project. The rule <a href="https://maven.apache.org/enforcer/enforcer-rules/requireJavaVendor.html">requireJavaVendor</a> defines the allowed and forbidden JDK vendors.</p>
+<p>We should also define the version of the Maven tool using the <a href="https://maven.apache.org/enforcer/enforcer-rules/requireMavenVersion.html">requireMavenVersion</a> rule:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nt">&lt;requireMavenVersion&gt;</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="nt">&lt;version&gt;</span>[3.8.0,3.9.0)<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="nt">&lt;/requireMavenVersion&gt;</span>
+</code></pre></div>
+<p>The value here, <code>[3.8.0,3.9.0)</code>, means all versions from 3.8.0 to 3.8.x but not below or above 3.8. In other words, Maven 3.8.1 and 3.8.5 are accepted, but not the 3.6.3 or the 3.9.0 versions.</p>
+<p>Due to the semantic versioning used in the Maven release process, all third digit releases are bug fixes only, so there should be no behavioral differences among them. In other words, it is safe to use any 3.8.x release because they will not create differences in the build outcome.</p>
+<p>Again, with a similar approach, we can limit the build to a specific operating system version, family or architecture using the <a href="https://maven.apache.org/enforcer/enforcer-rules/requireOS.html">requireOS</a> rule.</p>
+<p>The last rule in this group is the <a href="https://maven.apache.org/enforcer/enforcer-rules/requirePluginVersions.html">requirePluginVersions</a> rule that force us to specify the version of the plugins used in build process:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">&lt;requirePluginVersions&gt;</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">&lt;banLatest&gt;</span>true<span class="nt">&lt;/banLatest&gt;</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span><span class="nt">&lt;banSnapshots&gt;</span>true<span class="nt">&lt;/banSnapshots&gt;</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span><span class="nt">&lt;banRelease&gt;</span>false<span class="nt">&lt;/banRelease&gt;</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="nt">&lt;/requirePluginVersions&gt;</span>
+</code></pre></div>
+<p>These rule will fail if the basic Maven plugins do not have a version specified in the <code>pom.xml</code>file or if the version is “LATEST”, “RELEASE” or “SNAPSHOT”. A reliable and repeatable build cannot be based on plugins with a version not well-defined or not stable in time.</p>
+<p>My personal suggestion is to limit Java and Maven versions and to specify all plugin versions:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">&lt;rules&gt;</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span>...<span class="w"> </span>other<span class="w"> </span>rules<span class="w"> </span>...
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="nt">&lt;requireMavenVersion&gt;</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">    </span><span class="nt">&lt;version&gt;</span>[3.9.0,3.10.0)<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">  </span><span class="nt">&lt;/requireMavenVersion&gt;</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">  </span><span class="nt">&lt;requireJavaVersion&gt;</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">    </span><span class="nt">&lt;version&gt;</span>21<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">  </span><span class="nt">&lt;/requireJavaVersion&gt;</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">  </span><span class="nt">&lt;requireJavaVendor&gt;</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">    </span><span class="nt">&lt;includes&gt;</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">      </span><span class="nt">&lt;include&gt;</span>Eclipse<span class="w"> </span>Adoptium<span class="nt">&lt;/include&gt;</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">    </span><span class="nt">&lt;/includes&gt;</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">  </span><span class="nt">&lt;/requireJavaVendor&gt;</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="w">  </span><span class="nt">&lt;requirePluginVersions&gt;</span>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="w">    </span><span class="nt">&lt;banLatest&gt;</span>true<span class="nt">&lt;/banLatest&gt;</span>
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="w">    </span><span class="nt">&lt;banSnapshots&gt;</span>true<span class="nt">&lt;/banSnapshots&gt;</span>
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="w">    </span><span class="nt">&lt;banRelease&gt;</span>false<span class="nt">&lt;/banRelease&gt;</span>
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="w">  </span><span class="nt">&lt;/requirePluginVersions&gt;</span>
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="w"> </span><span class="nt">&lt;/rules&gt;</span>
+</code></pre></div>
+<p>Here, we enforce:</p>
+<ul>
+<li>Maven release 3.9.x,</li>
+<li>Java 21 or above (note there are no []),</li>
+<li>Adoptium (Temurin) as JDK vendor</li>
+<li>basic plugins should have a version specified.</li>
+</ul>
+<p>I usually don’t think it’s necessary to fix the OS version and the architecture, as I rely on the JDK vendor to be platform independent.</p>
+<h2 id="using-the-plugin-from-command-line-and-in-a-ci-pipeline">Using the plugin from command line and in a CI pipeline</h2>
+<p>The approach used so far is working perfectly: we configure the plugin in the project POM, and then we run the enforcer.</p>
+<p>An alternative approach, maybe more suited for a CI pipeline, is to provide the configuration on the command line, without the need to customize the project <code>pom.xml</code>. For example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>mvn<span class="w"> </span>enforcer:enforce<span class="w"> </span>-Denforcer.rules<span class="o">=</span>reactorModuleConvergence,banDuplicatePomDependencyVersions,dependencyConvergence,requireReleaseDeps,banDuplicatePomDependencyVersions,requireUpperBoundDeps
+</code></pre></div>
+<p>Using the property <code>enforcer.rules</code> we pass to the enforcer plugin the list of the rules it should check. Note: on Maven command line, we use the -D option to specify a user property.</p>
+<p>Unfortunately, we can provide the rule names only. If the rule requires a configuration like, for example, requireJavaVersion, we cannot use this approach.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>The Maven Enforcer Plugin is a valuable tool to ensure consistent and repeatable builds. It achieves this by enforcing rules on various aspects of a project’s definition and build environment.</p>
+<p>Here’s a breakdown of the key points from the article:</p>
+<p>Benefits:</p>
+<ul>
+<li>Ensures project structure and definition (pom.xml) are correct.</li>
+<li>Guarantees consistent and repeatable builds regardless of who runs them.</li>
+<li>Catches issues early in the build process.</li>
+</ul>
+<p>How it Works:</p>
+<ul>
+<li>Added to the project’s parent pom.xml.</li>
+<li>Defines rules to be checked in the <rules> section.</li>
+<li>Runs at each build and fails if any rule is violated.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["search.highlight", "search.suggest", "content.tabs.link", "content.code.annotate", "navigation.instant"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
