@@ -3,21 +3,21 @@
 * [Bruno](bruno.md)
 * [Git Crypt](git-crypt.md)
 
-### Java
+## Java
 
 * [The 5 Java logging rules](java/logging-rules.md)
 * [Java EE Schedulers](java-ee-schedulers.md)
 * [SLF4J correct usage](slf4j-correct-usage.md)
 
-### Maven
+## Maven
 
 * [Maven Enforcer plugin](maven-enforcer.md)
 
-### Testing
+## Testing
 
 * [Testing Java classes' immutability](testing/java-classes-immutability.md)
 * [POJO and JavaBean testing using the bean-matchers library](testing/bean-matchers.md)
 
-### Vaadin
+## Vaadin
 
 * [Vaadin 7 maven dependencies](vaadin-7-maven-dependencies.md)
