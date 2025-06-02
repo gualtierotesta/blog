@@ -76,4 +76,4 @@ On the contrary, GPG keys allow us to be more selective on who can have access t
 
 ## How to use git-crypt
 
-In [this page](../tools/git-crypt/), I describe how to install git-crypt and the configuration steps required to use git-crypt in a project.
+In [this page](../../tools/git-crypt/), I describe how to install git-crypt and the configuration steps required to use git-crypt in a project.
