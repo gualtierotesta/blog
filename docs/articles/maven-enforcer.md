@@ -2,7 +2,7 @@
 tags: [coding, java, maven, plugins, versions, pom.xml, super pom, maven-enforcer-plugin]
 ---
 
-*Last update: 29 Nov 2024*
+*Last update: 02 Jun 2025*
 
 ## Introduction
 

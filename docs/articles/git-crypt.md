@@ -2,7 +2,7 @@
 tags: [git, encryption, security, git-crypt]
 ---
 
-*Last update: 30 Nov 2024*
+*Last update: 02 Jun 2025*
 
 ## Introduction
 
@@ -59,7 +59,7 @@ How It Works:
 
 When someone clones the repository, the encrypted files will remain unreadable unless they have the git-crypt key. Without the key, they can modify, commit, and push all the other unencrypted files as usual.
 
-git-crypt can work in two different modes:
+Git-crypt can work in two different modes:
 
 * shared symmetric key
 * GPG keys
@@ -76,4 +76,4 @@ On the contrary, GPG keys allow us to be more selective on who can have access t
 
 ## How to use git-crypt
 
-In [this page](https://gualtierotesta.github.io/blog/tools/git-crypt/) from my personal website, I describe how to install git-crypt and the configuration steps required to use git-crypt in a project.
+In [this page](../tools/git-crypt/), I describe how to install git-crypt and the configuration steps required to use git-crypt in a project.

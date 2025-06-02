@@ -2,7 +2,7 @@
 tags: [ide, api, postman, bruno]
 ---
 
-*Last update: 24 Nov 2024*
+*Last update: 02 Jun 2025*
 
 ## Introduction
 
@@ -43,11 +43,11 @@ The first use case is when our application uses external APIs from a vendor, ano
 
 To use an external API, we usually need:
 
-* the secrets to access the API: user credentials, API keys, tokens…
-* the documentation of the API endpoints we need to use
-* examples of how to use them
-* test data to pass to the endpoints
-* response examples
+* The secrets to access the API: user credentials, API keys, tokens…
+* The documentation of the API endpoints we need to use
+* Few examples of how to use them
+* The test data to pass to the endpoints
+* Few response examples
 
 The best approach to collect and verify this data is creating an “external APIs” requests collection and using Bruno to verify that credentials are correct, endpoints accept the data we are sending to them and return the data we expect from them.
 
@@ -119,7 +119,7 @@ If you follow the [.env solution](https://docs.usebruno.com/secrets-management/d
 We have several options:
 
 * Use tools like git-crypt to crypt the environments files or the .env file
-*   Exclude the environment files and the .env file from the VCS (= add them in the `.gitignore` file) and share them in another way.
+* Exclude the environment files and the .env file from the VCS (= add them in the `.gitignore` file) and share them in another way.
 * Ask Bruno to store the var values internally when marked as secret. See [here](https://docs.usebruno.com/secrets-management/secret-variables) for details.
 * Use an external secret manager like HashiCorp Vault. This feature is documented [here](https://docs.usebruno.com/secrets-management/secret-variables), but it is not included in the free edition. This solution is the most secure.
 
